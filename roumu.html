@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAIEI EXPRESS 労務管理 v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+const APP_VERSION='v1.0-labor';
+const DEX_LOGO="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAABYlAAAWJQFJUiTwAAAVjElEQVR4nO2dfYwkx1nGn7OO89m3uMcOHRuEswNRIxBLdqMQhMCwc3wkwXHwCmIii48bRxGyjkheI5+QBcrOWSAQ6yRrcDbGmGQ28omAENkjCQmywDNKkIJkwRw6hKETPAshst0injrfOXe2dccfVX1T01Nd0z1dPTs7+/yk0c52V79V091Pfbz1deDKlSsghJi5ZrcTQMg0Q4EQYoECIcQCBUKIBQqEEAsUCCEWKBBCLFAghFigQAixQIEQYoECIcQCBUKIBQqEEAsUCCEWKBBCLFAghFigQAixcLAMo54fNFJOdUQUbucJ5/lBFUBdO9cSUdgqnEgyEdTzq6p/eyIKO7uXmvyUIhAAawDahuOrnh+0RBSu5AhX1cItqfMtVwn1/OBDAH4TwHkArydOXxRR+P2eH3wAwO8CuJg4fwTAfwC4Q0RhT9l7DMAvA5jTwn0LwN+LKHyPFu9nAdQA/F/C5mEA2yIK780TTrP7GIAVQ1o9AH+hhzfYPqjS/RERhQ8ZwiXvz0EAp0QU3uv5wfMAblbHj2qZ2F8CeLv6/o8AbvP8oAVgWR3bElFYV+l+n/bbXgBQE1HY9fygBuBpde6iiMLrVLruAPBEfFz9PQLgAoCl+JkUoSyBQERhLXnM84MKgK7nB3URhc0s4QB043DqxjpD5W4PQj4QzxBkR/2dQ//hJ/kOABsA6uqBvR/AtyXCXAfgDs8PHhBR+LDnBw8AuEOzneSwSt96lnCGY2lpvUdlPJ8eYftBzw8+pV7OR7VwJuI0JAUZP8cfUP9eAvAHI+xUtP/nITPCaiLcRc32nxvSDshn8jkAt1niy0RpAvH8YGg1CBGFBzw/6ED70ZZw2ypcN2e8FQAfALCgXf+UiMJThuAPoP+ABYBkjhM/9POQOZr+EugvYk39fS/64ojt6eFuA/AwgJ/R7Jjsxv/flTFcGnEaKpAZwCEA7wLw6RTbcbjDABqQVVubOEbx2+i/wBdEFH4u5/VvUJmYiSXN9rcAvKi+z6u/b8oZl5FSBCKi8EDyWJoQLOG6eeNV1aUTGMxVlgEc8/zgwwDuElH4Je2cHq4norBqsiui8An0i/I4riaAY5bk9EQUVhPh4hxSz/m/KKKwbrGTN5xORyt5ly3hvqiqOV2YS9KYrZxpuFv7/tkc112GdCDNAfgNAJ8fEf6Sutc19Ktil3PEl8rMeLE8PziFwRwryc0A/tbzg5+YXKr2L54fLAHw1b+vQJZIWdHfy7qjJI3FTAhE1f3vgqxCAMD9AL4HwFsBPKIFnYMUSQWkbP4Q/efxPyIKuzmu1cNej+F2SBo9yHbjDoD/zBFfKqW1QSbMI+jX/dsiCjfiBr2qYqygXzedg/RIfXDiqdxf/Ij2/YnUUGbaAG6ErO5dD3tV9irKhVzNGZeVsvpBMi3XOCJcFRnaIao0eGPiOkB6lrqqqJ9PXPZzWdKnxXE7gM3E4TfksWHhF1XdWedREYUPjxluGvg19Nsy58dM41kAP66+10YFVp7BBf16F/emTDfvUAM8azj10q8AWM1gQvdmAEDF84OqiMJt5QF5znDNTVnSpvF9GBaZzss57T2vfZ/DcLspftBfx2DJlxZu2tBLjzNj2vg4+gJ5BbIksfFBDD6jNqTHsBBlunkbyWMiCoeOqbA19HOJWBxdEYVNQ65pYwdSMCtKJA3PD+4B0IFs7N2Xw1ZWzgM4nvOaewG8G+kOhZhfAfDvMPd3TDN6h6LNK5aKiMJTnh98DP1q1q5QViP9pOHYmiV8DX2B9AA0RBQupYYepAP5kgKyZ7kHKbA1zw+aIgqbhrrpNzPaNvE1AFva54cSruORqDTeCpnDxXZeMITrAvjORLjzyXBTSBPAq+r791r6MkZxNkfYRwH83ZjxpFJWP0gjeczzA5tAADnGaui6DHH1PD94ETI3rquSaxWyF3Zb81itQorQA/CFvPFofH2M/oghlEhOxP8rp8JQD7ghXA2jS57dJs60boLM/R/AeE4RvZplRY1QeAbAO8eIJ5WZcPNCVp1eg3z54+pUBdL33lWfljp/HsDvFI3Q84PHPD942fODlzw/eLaovRnkE9r3u1NDWVCjH4Sb5IzHTAhEDWH4BGSxPg9ZnVuDdA966jMPKY7bXQxig2wXzEEKca+1ESbB76E/FGauQAdtnmqWc8py87bKsKuoGxruTTWi9BsYHmoS878A7ra0Fw4b7BYZnh3buyV5IjEEPGao81K5qJPH84ixotIwqmP0FhVulO1bDPeoa+oEVFXfr0J62g4B+H2MN3gwUzVLpStruzUzZXmxljHcUG+pvxUMDwq00QGuvlRNDL9Y9fiYiMKHPD/4IwC/BODHtDB/liKMSPt+M/rjeGJ2DPFlxWQvdu82kK3zaxt29/IoFg1piNEHOr4Tw3X3/zJcYwq3hfThIH8M4E+0tOQm4c1Ko4Lh3zmUMY1DmVWsVvLj+cEG5AunT5qqwfISqupQW13TM9jtJcOLKHxcRGFd+6SVGh+DW69QA33vTZLXADyZwcZrAP4qQ7hXkW98U9L2R5Ce1vMAPqW+P5ozjquIKHwc/TbEnOrMG4ehapaab2Jrn3xlzLgGKHOoiSnnOgM1CcYQzuQajlmB7Bn/TMr57ZTjVtR8h9shSyZT56E+3D2eUHWDdi4+dlGz934ADyXsXQLwIW24t36tzmUADybCmUrb2F43Jc0jbYsofNzzgwDArwK4Vgt3AbIq2lXhHvb8YAGy3yb5vhxE/x49rx3T0/wk5JD5gwB+WB37KmSmeBD9kkr/rclh/B8H8DZ1/Drt+HsA/CkGvX+vA/i8C08jABzgJp6EpDMTXixCyoICIcQCBUKIBQqEEAtldRTWyrBLSB5crJ9Wlps3rXOKkEmSaU6SDVaxCLFAgRBigQIhxAIFQogFCoQQCxQIIRYoEEIsUCCEWKBACLFAgRBigROmCLHAEoQQCxQIIRYoEEIsUCCEWKBACLFAgRBigQIhxAIFQogFCoQQCxQIIRacr2qilvzhqiZkt2mLKKwVNcIShBALFAghFigQQixQIIRYoEAIsUCBEGKBAiHEAgVCiAUKhBALFAghFsrYQKcL+57nhEyCrgsjXPaHEAusYhFigQIhxAIFQogFCoQQCxQIIRYoEEIsUCCEWKBACLFAgRBioYxVTaoA6q7tEpKTrojCZlEjZYzFqgJYK8EuIXloA2gWNcIqFiEWKBBCLFAghFigQAixQIEQYoECIcQCBUKIBQqEEAsUCCEWKBBCLHBVE0IssAQhxAIFQogFCoQQCxQIIRYoEEIsUCCEWKBACLFAgRBigQIhxAIFQoiFMlY1gecHkx6/cgZAD0BHfVoiCrtlReb5QQvAcln2HdMWUVgznfD8oAbgaQdxCABLLu75wuZ6B8Bi4RQB9589fmKjqJFZKUEWIV/Y+wB8EsBznh90PT/YUOt0EQMiClsAHnFgyoODJXYWNtc34EYcbRfiAGZHICbmIQXznOcHTQrFjIjCVcgSuCjLnh+sjnvxwuZ6DfJ5FUUAWHFgB8BsC0TnGKRQGrudkCmlDvliFeWjnh8s5b1oYXO9AmDbQfwAUD97/ETPka19I5CYNc8POp4fVHY7IdOEiMIOgIYjc80x7m8TsppWlEfOHj/hSmgA9p9AAFnHbY2T080yIgo3AJx2YGoROcS2sLm+CuBOB/GeyRNvVvajQAD5ELdZkgxRh5uq1n2eH4xsByxsrlfh7qV2WrWK2a8CAWQjvrXbiZgmRBT24K6Bm6WqtQ03Vav7zx4/0XFgZ4j9LBAAWPT8wIk7cFZw7PpNbQ8sbK43MGUuXRP7XSCArA6wPaJRtutXuXRdbJEhUPJeNBSIhKXIMHWU4PpVLt2mA7uAbHd0HdkyUspQkz3IsucHNVW9mARnAIzdqZaTsRquIgo7qt/oow7S0FT3twcpjnkHNrdcu3RNTKtAjppeVtUbXgVQg2xMuqjDxjSU3UnQm6AYx0ZE4YbyRhUdd7YIoKHGWblw6e5gQhnMnqpiiSjsiihsiShsiChcAnAUcqstFyxzOIqRFTioah2qHLkPly8/6iA9ALBShkvXxJ4SSBIllhqALUcmnY3hmRVUtahe1E7lfe8ArrnmSPEU4WRZLl0Te1ogMSIK63DTC1x3YGPmEFG4jQKu37nb3oJrv8t3kZT22eMnGi4MZWUmBKKoo3hVwGWbZtZoYAzX75E3vRE3/uyPuoi/dJeuiZkRiOYhKYSaREQSjFPVOnj4EG74hZ9ylYTSXbomZkYgiqYDGzUHNmYSNer3/qzhr3vH23HwxhtcRH16Ei5dE9Pq5h0L5bsXKDa+p+ooOTaW1LTdMumoHnGnZHX9zgXfjcrbftBFlDvYxbbhTAlE0UExv33VUTpseNg7c9pNrADoIiUjOlQ5Au+9P+0qrlJG6WZl1qpYgBRIETguawSj2iPf/vM/iWsOX+siqpNnj59ouTA0LrMokKK5jYvh1zNPmut37ra34Po33+oiijOTdumaoEBIERqQbQQAwLU3V1y6dKei03YWBTKxXtb9jj7B6uDhQ7jp7ne5Mr26Gy5dE7MoEDJBlOv3pGOXbtOFIRdQIKQwt5789Y4Ll+7rL53D8x9+8lkHSXIGBUIKoRZeaLqwde6v/wGvnXvlt6ZpNAMFQorShAPP30tPfQUX/vvFqzanZcWZWRRIbbcTsF9Qa1oV7vC89I0I57/8r/qhebiblluIWexJ3wtMYsptqe7uhc31JTiYjnv54iWIbeMC83d6flAXUdgsGkcRZlEgRYvmndFBCrMnptym4XLhhZef+idceiFVyxueH5S6lcUoZrGKVXSoSNdFImacBhzMnTn3b1/DuWesTisn2yoUYRYFUrRO3HWRiFllYXN9BQ62Kbh88RIu/M2XsgRd3s1V+WdKIFnWg81A14GNmcRl1ap36gt4/eKrWYOv7dbifjMlELgZv9NyYGNWcbKW7je//M+6Szdz3Lvh+p0Zgagc5pgDUxzLZcClS/fCU8+Mc+k8dmEFzJkQiMpZmg5MtdUAPKIxAZduVo45qkZnZs8LRC321oKbFUmaDmzMIk0XRka4dLMy0f0m92Q/iLpBS5BtDhfVKkDOQdiVhQGmGZc7z5575tkWiq/qHrt+awXtZGJaBbLh+YEpq6nCzcLHxjgnWL2axKINOs1xeqRd7zwrorCnqkhFBbfs+UFDRGGjeNLsTKtAJr2Am8BkG4CTXrShlfeCEneeXYF0hBT1hq15frCt5qOUxp5vgziiwcb5EE2UsPOsGjbiahxa6a5fCkR6rriBjkbZO8+q6p6LtZTnTfZdst8FMjWLA0wLyqXbcGTOtqZVHRPcUXdc9rNABIAaq1ZDNDGBnWd3YUfdsdivAonFwV5zDZcu3Sw7z05qR90i7EeB7IDiGMK1Szdz4JJ31C3KfhPIaQBLFMcgJbp0M1+DEnbUdcF+EUgbcmPQFbY5jDThpt0x1s6zKsNqOIgfcNwemWWBCMi9C4+KKJzkFs97ioXN9TqmYOdZ5Wp34fpdhEPX77T2pI9DG3KyUwtybwxWo0ag1rRy1QfkYufZOizbKuTgPjWXvXC1sSyBHC3J7hC7VDKsovjiEJOkaznnwtXac7HzrBqrtQQ3e7Q4qUofuHLligs7hMwks9wGIaQwFAghFigQQixQIIRYcO7FUkvXZ5mZf1JEYUPNrDNNHmqrvw2Tp0oNK9AXEngkue2x5wdWD4SIwgMZ0tsWUVgz2Duqp0t5XxoY7FOIp/GujuqgTNyH0yIKV7RzQ/FmvM9x2CyemDakd+5ftGM3Ks/SNvq/qy2isKY6417Swr41dq2r0bUNDI7riielDczctDz/M5CeqEbiPpvuRQXD7uGh92EcprkEWVafp1OGDyR//K4NW1fpa2G4w82DnDPfytm7e+ekV+8ArvZo60M+4vuu/67lxDn92jjj+gyGBz16kPPRs96LRdifP1R8Fch7r4tjy9Ue8WX0g/TQz/2BwdxhB32ffBfDtCF/bAWDA+fiaZoArr6Qybnp854frFg6h2LboziZ+N+UziTJBdXOQKY3XlBiEbITLE+nXNPzg2qOoTHJdAP9tGd5Hh3tbxym5vnBkFEl3qp2qK2OVzG8PNBpyAUW4vuzCJm5NQzp3UF/BRV9cYc60nvpmxgU45aIwnpK2Nw4F4jKSWrx/4kisTlion1LVbsqkDclrUdVv1k76ItlBemD7lpZJvnnXQjAINarRbvnB12VphbyL2kar96RtSRpJQ/Eq6LHVUSVplHPo4XBUsKU29cSx+O464lwerWrg/6LXIdZIN3E8x+1QEdyeL5TcQDTN9SkrurWyTppK/G//tLU0a+LH/P8IK2+v+b5gZ4rnTSJIVlfF1F4YESaky+QPv+6gWLjgu7MMYTb1B4ZlXYTLfRz77Re7RUM9lTHpY9eFWonhvu00H+Z0178pZQ2SVqml6zGOR9eNG1tkHkMVwHuSTTS6uiXLDvqnL6nx65OoXU09EX/PQ0H9vKgv2Tz6L+EbfQHE+rHgX4GZmtbZBkXlVztZej5j6DhelG5aRPIaQzWl005jS6Aispx9AeTluNuQY4Riz/NlHBHE59c6A1Kzw/qnh90PD9YzTlPoYn+fcg6cC+Z7rHGw6nS1zSBaRvmNtyOVmJ3tePVRLhahuh3MDiiN8saaHpm4sHx8k3TVsXqQP7ALvovxoZa/6incgfdo2JaX2pRNW67iePdLDnRGCVAsljfUKVcFTL3n4dsuG5huI5uo44c60c5HrSptxdiWpDVqmQjvJX4Hjsm5tW+Hk1IcdS1cGkzCLvo/+5YHLZdps4o2xtavHd6fuBsesO0lSBxDqaXAp72v156CMhcNv7o7knnUy/TUOnV51UvA3gOsk2g54CNnHa7ea7x/OCK4ZMrTo1WMjkiCjsqTckt6q5mEGo5H/3lX4O8F59E/14IWDIKdT8b2iEP6fdh1RAecDhpauoEAly90fqDWFOlh/7ib6uJUDXlpdHruBNthyiv1f2WIPeMs8+emkTUHhnQPclSUb+3rcS55P812OeYj1wPwPD8j9naFurebmmH5uEok5xEFUv3z7cM55vacf18HYP11ioG2w3JRl8TWh1Y3dBRcUNdY+pDMKGH6+onRBRuKFdmDdKb01Wf7YziaMJ8H1Yw+LC72t9R6W4Zjo28JyIKO54fpIWLq8BXwyau7UF6o+qQz6yG/r1oGu5FU7Ovn1vBYEZXxfBv1sM3UMLuYJwPQoiFqaxiETItUCCEWKBACLFAgRBigQIhxAIFQogFCoQQCxQIIRYoEEIsUCCEWKBACLFAgRBigQIhxAIFQogFCoQQCxQIIRYoEEIsUCCEWKBACLFAgRBi4f8BQqtmJ+Ev+oIAAAAASUVORK5CYII=";
+const DAIEI_LOGO="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAxIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMzAxIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4KPHJlY3Qgd2lkdGg9IjMwMSIgaGVpZ2h0PSI0MCIgZmlsbD0idXJsKCNwYXR0ZXJuMF8yMF84NzMpIi8+CjxkZWZzPgo8cGF0dGVybiBpZD0icGF0dGVybjBfMjBfODczIiBwYXR0ZXJuQ29udGVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgd2lkdGg9IjEiIGhlaWdodD0iMSI+Cjx1c2UgeGxpbms6aHJlZj0iI2ltYWdlMF8yMF84NzMiIHRyYW5zZm9ybT0ibWF0cml4KDAuMDAzMzIyMjYgMCAwIDAuMDI1IDAgLTMuMSkiLz4KPC9wYXR0ZXJuPgo8aW1hZ2UgaWQ9ImltYWdlMF8yMF84NzMiIHdpZHRoPSIzMDEiIGhlaWdodD0iMzAxIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiB4bGluazpocmVmPSJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQVMwQUFBRXRDQVlBQUFCZDR6YnVBQUFBQ1hCSVdYTUFBQXNTQUFBTEVnSFMzWDc4QUFBTEpFbEVRVlI0bk8zZFAyNGIyUUhIOFRkQnlnQTIwcVFKWUFPcFVsazNNTGNQc000SmxtVTZPeWN3M1cycEJYSUE3ZzNjcHJKY3BOZmVRQzVUUlFiU1R3cU9nMTE1SGpsL1JmNlN6d2NnREpDanB4bVMrbkptK0VnM2Jkc1dnQlMvT3ZjS0FJd2hXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0Z2lXa0FVMFFLaWlCWVFSYlNBS0tJRlJCRXRJSXBvQVZGRUM0ank2eWsvMURUTlZTbmxlc0tQM3BkU2Jrc3ArN1p0N3liKzdsZWxsRGM5TiszYnR0MlBIT3U2bEhMMTRPcmJ0bTM3eHE4dFAwbmJ0cHZLNzlpV1VyWkRsNTlqeWUwcHBieHAyL1oyNFBqWGJkdSs3MW1mNTZXVWZkL2dmZHMvWS8xdnU4djd0bTN2YXd1dC9UeWZNWDZmbzgvLzduZTlLb2Y3NittSnNRYmRQdy9HMzVaU25wZFNOZ01XdnltbDNMUnRlek5rN0srMGJUdjYwcTFZTy9OeVBmRjN2NitNZHp0aHJKdWVjVzVHTGovcGN1UjM3TVlzUCtleTVQYVVValk5NDI4cnk5NVYxbWRmV1g2LzB2cmY5NjMzd3MvejNjcmpEL2s5MXpQdW42c1R6NkdyY2dqY2xQRnZTaWxQeHo1dnozbDQrTHA3cFJ6cjI4cjFMN3BYYWk1RTk4ci9xZWVtWjkwcjgzOTFqOTEzbGFGMkM2N1d6ejBwcFh6bzlrTFc4clpwbXQySzR4L1ZOTTIrbFBKNjRvOC9LYVhjMU82ZnBtbWVsa040WGt3Yy8yWDM4Nk9jKzV6VzZ6R2g2UTROajluTVdSbFdzUnQ0L2JheTNNZDI0cW1FRVpZNlJLdDVlNDRYMUM0MnRSZUNvWjZVK3YxejNkMCt4NHVITDJDbm5EdGFwZFNmckgxT1JldlU3VHl5SVh0YjNTdDI3M25Fc3Q1ZTFzKzlmSVNvbk9PNXVWMW9uSmZkWS9UUVV0czBhcHhMaU5ZWXB6YnUyOHFkeTNudFRsei9wdlMvWW4rY2ZMSjJ2T2NyajMrTzUrV1NoNzE5WTgzZHkvcGkxSDJ6ZExTK2FkdTJxVjNtRE56dDZnNjVrelp6ZnM4RUg0OXQ4eHIzeGRxbWJNK0p1THd2cFh6dXVmNVowelIvS2d2dlpaMjQzNytaTXVZRHF6M1BoNHhmdWV5R0RyN3kvZlB1eFBnZlo0NGZ0YWUxSGJpY1E4UUwweDdlTnErZEYvbGJPZjllRmtFbXpkTTZrODNBNVVUck1sMlgvc1BBWjBlVzUvSGRsVkxlVmE1ZndyNTgvWTdocUxFam90V2RKQjM2dHVxVHBtbXUyZ2NUSFRtdnRtM3Z1eWt1Yndjcy9xbnRtWHpLK3JwM2FuY3JqcitmTzBiSzRXRnQ3K21ueXZYYmxkYURlYTVMLzdtdGgzWXJyd2ZCVXFLMXFWeS9IYm44R2w0MlRkTWV1ZHc4NHJvczRzVDJ0RlBIN2M1dG5kcUQralQzMWZqRXVuK1lNM2Jud3hyM3o5RHhtNmJaekJuODFPUGJOTTE5MHpUdkovNmV0d1BHdjJ1YVpqOTFtc25GUjZ1Ynd0QTNDLzVUZHdqWTkyNkUyZkdYYXpmejlyWGNyVHorb00vd0xXenFLWkluNWZBMzkrSEVwMWFHN0RYM2VWWU9rMTV2cDN3YTRlS2pWZXFIaHU4Zi9EdjA1emlqN3B6SlB5bzMvM3VKY3g0VFBNYXMrM09jbzlzdk1NYnJJNTlFbWJ0Tlh6NG1kTlo1V212WVZLNFhyVnkvclZ6L216UHNJWDh1OVhsaVMzbjNDRkg4U25jazhzTUNROVgydHQ2VTZYdGJYendwSSsvL2hHajF4ZWZ6bHprODNaT2g3Mk1pdFk4ZWNFYmRlWkkvSGxsazl6aHJVa281L01HOVd2bWQ1bmRqSm40dXJUMTh6ZExjY0Qzck80enJ6bEZ1U3YwTnNhRTJZeGErNkNrUDNSTzhiK0xoL1lOUHp0K1gvdmsrcjhveXU4akhmQzdIengwa1RyMllQV3Y1aU4ySjI3OXJtbVkzYzgvazFQcmZsTU01ck1IZkYvWEFUK1h3blB0OUtlVVBQYmYvczVUeWZUZiszWXp4YTBhdGM5dTJiN3B6VTlzQml6OHYvUit5N3QwQjZJSi8xUjFDRGprL3RTMzF1WG1EWEhTMFN2MFE3MWtaTnQ5blU5YVAxbTI3d2hmMG5kTmEyOU85Q0wwY3NPaTJ6TmpqZW9USDQwM2J0bC9PeGZ5cjUvYmZsY1Azc3QzTkdYL3F5dlVaT3YrcWU0eEdmek5FTjYvdTVEbXVidnhaMGJyMHc4TzU1NldjMTdvc3U0SEx2VWs0dE8vMjBuNnMzTHoyZWJML1d4Y2JyZTZFN0t3aWw4UHMrTTNzbFdHMjdweklrTDJzVWlhY25EMmpYZVg2Nzg0OTdhWnBtcHVWNXBGOUdiOXZEdFp1cWZGckxqWmE1VXpmMWNOcWFoSDZlMjM1a0wydHUySnY2MUV0ZlU3cnFta1crOWFWN1VManZDcnJQbm1lVHRtYnUrUnZNSmk0ZDNwYk82bDk0cXVVLzFJTzV4MGY3b1Y5MmR2YVRWaVh4N1l2L2R1MzdkNVVHSHV5ZjhyZjBkM1FjMmduSHQrNTM4SDEvTVQ0ODErSWhueVIvTU5MV2ZrTCtic042MXYyNkg5ZVVlci82VVh2bC9NWC83SEZZdHRUanY4SEVmdkt6K3k3MjE5VmJyK2ZzdjRMM2orMTUvbFgyM3JrdnZ6cStmMklmMGUxdjRkRkh0OEZ4NjcremZWZEx1SHc4SzdudXRvaDNjMkpzV3EzYjRhdENrc2I4aDlXdElkM252cm0yajBaKy8zaFozUnNBdWE1M0N3MVVOdC9aTkQzbUUxeE4yYmhjMGZyYytsL203UVdyZjJKOFdwdnVXNEhyZy9MMjFXdS83SDk1ZUZNYmJuYTlSZmxRc083TC9ObnJKZFNQMmUzVzJEc1VrWk9TenAzdExadC8vSCtwdWU2eisySm1jdmRIMEhmN053WENTZDEvOWQwOTNsdEwrc1hleWJ0aVA5dTdJTHRSbDYvcXU1dmErNmUzaysxTWJySGJPNUU1QjhxZTNGVjU0cldwM0w0SHV5djlveTZtYlY5cytDSGZqanpwbks5ZHhFZlgrMFA1bVBsQldoWFdiNTIvVVU1RWQ2elBQKzZkZnB6bVhZbzkyTTVuTXVxdnBIUUhpYnl2aXZqOStnK2wxTCsybGIrTi9kam11NkUycmdmT3J5Q1RuMlg0ZjdZSGxOM0R1UjV6MDEzN1lCM1I0NnMyMWMvMzgwZGVyZ0hWbDIveXZLVDFGNWRhdHMvOXRWb2lDVzNwL1M4ZTNoay9PcGpXWHZucVcvN2ErTXZkVjhkZVM0ZGU2ZDA4RGJQL0RzNk9mNklkZXRUM2NiSzJLTzJaYzVqTkNsYUFPZHk3bk5hQUtPSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVVVRTGlDSmFRQlRSQXFLSUZoQkZ0SUFvb2dWRUVTMGdpbWdCVWY0RHQrcDcrRlJKeE5rQUFBQUFTVVZPUks1Q1lJST0iLz4KPC9kZWZzPgo8L3N2Zz4K";
+console.log('%c[roumu.html] '+APP_VERSION,'color:#03968F;font-weight:bold;font-size:14px');
+const FIREBASE_CONFIG={apiKey:"AIzaSyCA1CtdHAenDWKTco33Oj4K8iY-zi3fJDY",authDomain:"daieiexpress-1942.firebaseapp.com",databaseURL:"https://daieiexpress-1942-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"daieiexpress-1942",storageBucket:"daieiexpress-1942.firebasestorage.app",messagingSenderId:"676880556822",appId:"1:676880556822:web:feb1be9eff2238f102e637",measurementId:"G-Q6K7Z2D0NY"};
+let currentBranch=localStorage.getItem('dex_mgmt_branch')||'osaka';
+if(currentBranch==='all'){currentBranch='osaka';localStorage.setItem('dex_mgmt_branch','osaka');}
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:"Noto Sans JP",sans-serif;font-size:15px;background:#f9fafb;color:#1a1a1a}
+#app{height:100%;display:flex}
+
+/* ========== SIDEBAR (mgmt.html完全互換) ========== */
+.sidebar{width:240px;background:#fff;color:#374151;display:flex;flex-direction:column;flex-shrink:0;padding:24px 0;border-right:1px solid #e5e7eb}
+.sb-logo{padding:0 20px 24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f3f4f6;margin-bottom:16px}
+.sb-logo-mark{width:48px;height:48px;flex-shrink:0;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;transition:transform .15s}
+.sb-logo-mark:hover{transform:scale(1.06)}
+.sb-logo-mark img{width:48px;height:48px;object-fit:contain;display:block}
+.sb-logo-text{display:flex;flex-direction:column;line-height:1.2}
+.sb-logo-main{font-family:"Noto Sans JP",sans-serif;font-weight:800;font-size:16px;color:#2F2C2C;letter-spacing:.2px}
+.sb-logo-sub-text{font-size:10px;color:#9ca3af;font-weight:700;letter-spacing:1px;margin-top:2px}
+.sb-section{padding:14px 20px 6px;font-size:10px;font-weight:700;letter-spacing:1.5px;color:#9ca3af;text-transform:uppercase}
+.sb-back-dispatch{display:flex;align-items:center;gap:8px;margin:8px 12px 4px;padding:8px 14px;background:linear-gradient(135deg,#03968F 0%,#0AB8AE 100%);color:#fff;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;transition:all .15s;box-shadow:0 2px 6px rgba(3,150,143,.2)}
+.sb-back-dispatch:hover{transform:translateX(-2px);box-shadow:0 4px 10px rgba(3,150,143,.3)}
+.sb-branch{display:flex;align-items:center;gap:8px;margin:8px 12px 0;padding:10px 14px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;cursor:pointer;position:relative;transition:all .15s}
+.sb-branch:hover{background:#fff;border-color:#a7f3d0}
+.sb-branch-icon{color:#6b7280;display:flex;align-items:center}
+.sb-branch-label{font-size:12px;color:#6b7280;font-weight:600}
+.sb-branch-select{flex:1;border:none;background:transparent;font-size:13px;font-weight:700;color:#2F2C2C;outline:none;font-family:inherit;cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:18px}
+.sb-branch-arrow{color:#9ca3af;position:absolute;right:14px;pointer-events:none}
+.sb-logout{margin:auto 12px 14px;padding:12px 14px;background:transparent;border:1px solid transparent;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:12px;font-size:14px;font-weight:600;color:#6b7280;transition:all .15s}
+.sb-logout:hover{background:#fef2f2;color:#dc2626;border-color:#fecaca}
+.sb-item{display:flex;align-items:center;gap:12px;padding:11px 20px;cursor:pointer;font-size:14px;font-weight:600;color:#4b5563;transition:all .15s;position:relative;margin:2px 10px;border-radius:10px}
+.sb-item:hover{background:#f0fdf4;color:#03968F}
+.sb-item.active{background:#ecfdf5;color:#03968F;font-weight:700}
+.sb-item.active::before{content:"";position:absolute;left:-10px;top:50%;transform:translateY(-50%);width:3px;height:60%;background:#03968F;border-radius:0 3px 3px 0}
+.sb-item .sb-icon{width:20px;height:20px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:currentColor}
+.sb-item .sb-icon svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.sb-item .sb-badge{margin-left:auto;background:#f59e0b;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px}
+
+/* ========== MAIN ========== */
+.main-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#f9fafb}
+.content-area{flex:1;overflow-y:auto;padding:32px 32px 60px}
+
+/* Page header */
+.page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap}
+.page-header .ph-left h1{font-size:26px;font-weight:800;color:#2F2C2C;letter-spacing:-.3px;display:flex;align-items:center;gap:12px}
+.page-header .ph-left .ph-sub{font-size:13px;color:#6b7280;margin-top:4px;font-weight:500}
+.page-header .ph-breadcrumb{font-size:12px;color:#9ca3af;margin-bottom:6px;font-weight:600}
+.page-header .ph-breadcrumb a{color:#6b7280;cursor:pointer;text-decoration:none}
+.page-header .ph-breadcrumb a:hover{color:#03968F}
+.page-header .ph-right{display:flex;align-items:center;gap:8px}
+
+.btn{font-family:inherit;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;border:1px solid #e5e7eb;background:#fff;color:#374151;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.btn:hover{background:#f9fafb;border-color:#d1d5db}
+.btn svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.btn-primary{background:linear-gradient(135deg,#03968F 0%,#0AB8AE 100%);color:#fff;border-color:transparent;box-shadow:0 2px 6px rgba(3,150,143,.25)}
+.btn-primary:hover{opacity:.95;box-shadow:0 4px 10px rgba(3,150,143,.35)}
+.btn-sm{padding:6px 10px;font-size:12px}
+.btn-ghost{border-color:transparent;background:transparent;color:#6b7280}
+.btn-ghost:hover{background:#f9fafb;color:#374151}
+
+/* Views */
+.view{display:none}
+.view.active{display:block}
+
+/* Cards */
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.card-title{font-size:13px;font-weight:700;color:#6b7280;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.card-title .link{color:#03968F;font-size:12px;cursor:pointer;font-weight:700}
+.card-title .link:hover{text-decoration:underline}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;font-size:11px;padding:3px 9px;border-radius:10px;font-weight:700;white-space:nowrap}
+.badge-success{background:#ecfdf5;color:#059669}
+.badge-warning{background:#fef3c7;color:#b45309}
+.badge-danger{background:#fee2e2;color:#b91c1c}
+.badge-info{background:#eff6ff;color:#1d4ed8}
+.badge-teal{background:#ecfdf5;color:#03968F}
+.badge-gray{background:#f3f4f6;color:#4b5563}
+
+/* Metric cards */
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px}
+.metric-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px 20px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.metric-label{font-size:12px;color:#6b7280;margin-bottom:8px;display:flex;gap:6px;align-items:center;font-weight:600}
+.metric-value{font-size:28px;font-weight:800;color:#2F2C2C;line-height:1.1;letter-spacing:-.3px}
+.metric-value .unit{font-size:13px;font-weight:600;color:#6b7280;margin-left:4px}
+.metric-sub{font-size:11px;color:#9ca3af;margin-top:6px;font-weight:500}
+.metric-value.text-warning{color:#b45309}
+.metric-value.text-danger{color:#b91c1c}
+
+/* Toolbar */
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.search-input{flex:1;max-width:320px;padding:9px 14px;border:1px solid #e5e7eb;border-radius:10px;font-family:inherit;font-size:13px;outline:none;background:#fff;font-weight:500}
+.search-input:focus{border-color:#03968F;box-shadow:0 0 0 3px rgba(3,150,143,.1)}
+.filter-tag{font-size:12px;padding:6px 13px;background:#fff;border:1px solid #e5e7eb;border-radius:18px;cursor:pointer;color:#6b7280;font-weight:700;transition:all .15s}
+.filter-tag:hover{border-color:#03968F;color:#03968F}
+.filter-tag.active{background:linear-gradient(135deg,#03968F 0%,#0AB8AE 100%);color:#fff;border-color:transparent;box-shadow:0 2px 6px rgba(3,150,143,.25)}
+
+/* Driver table */
+.driver-table{width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;border-collapse:collapse;font-size:13px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.driver-table thead th{background:#f9fafb;padding:12px 16px;text-align:left;font-weight:700;color:#6b7280;font-size:11px;border-bottom:1px solid #e5e7eb;letter-spacing:.05em}
+.driver-table tbody td{padding:14px 16px;border-bottom:1px solid #f3f4f6;vertical-align:middle}
+.driver-table tbody tr{cursor:pointer;transition:background .12s}
+.driver-table tbody tr:hover{background:#f0fdf4}
+.driver-table tbody tr:last-child td{border-bottom:none}
+
+.driver-cell{display:flex;align-items:center;gap:12px}
+.avatar{width:38px;height:38px;border-radius:50%;background:#ecfdf5;color:#03968F;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.avatar.avatar-lg{width:96px;height:96px;border-radius:16px;font-size:30px}
+.driver-name{font-weight:700;color:#2F2C2C}
+.driver-kana{font-size:11px;color:#9ca3af;margin-top:1px}
+
+/* Driver detail hero */
+.hero-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:24px;margin-bottom:16px;display:flex;gap:20px;align-items:flex-start;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.hero-info{flex:1;min-width:0}
+.hero-name{font-size:24px;font-weight:800;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;color:#2F2C2C;letter-spacing:-.3px}
+.hero-name .kana{font-size:12px;font-weight:500;color:#9ca3af}
+.hero-name .id{font-size:12px;font-weight:500;color:#9ca3af}
+.hero-meta{font-size:13px;color:#6b7280;margin-bottom:14px;font-weight:500}
+.hero-badges{display:flex;gap:6px;flex-wrap:wrap}
+
+/* Alert strip */
+.alert-strip{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:14px 18px;margin-bottom:20px;display:flex;gap:14px;align-items:flex-start}
+.alert-strip .icon{color:#d97706;flex-shrink:0;margin-top:2px;display:flex}
+.alert-strip .icon svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.alert-strip .title{font-size:13px;font-weight:700;color:#b45309;margin-bottom:3px}
+.alert-strip .items{font-size:12px;color:#b45309;font-weight:500;line-height:1.6}
+
+/* Status grid */
+.status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:20px}
+.status-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:16px 18px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.status-card-label{font-size:11px;color:#6b7280;margin-bottom:8px;letter-spacing:.03em;font-weight:700;display:flex;align-items:center;gap:6px}
+.status-card-label svg{width:14px;height:14px;stroke:#03968F;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.status-card-main{font-size:15px;font-weight:700;margin-bottom:10px;color:#2F2C2C}
+.status-card-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;color:#6b7280}
+.status-card-row .val{color:#2F2C2C;font-weight:700}
+
+/* Progress bar */
+.bar{width:100%;height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden;margin:6px 0 8px}
+.bar-fill{height:100%;border-radius:3px}
+.bar-fill.ok{background:linear-gradient(90deg,#10b981,#34d399)}
+.bar-fill.warn{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.bar-fill.danger{background:linear-gradient(90deg,#ef4444,#f87171)}
+.bar-fill.teal{background:linear-gradient(135deg,#03968F 0%,#0AB8AE 100%)}
+
+.text-success{color:#059669}
+.text-warning{color:#b45309}
+.text-danger{color:#b91c1c}
+.text-teal{color:#03968F}
+
+/* Detail section */
+.detail-section{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px 22px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.detail-section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.detail-section-title{font-size:14px;font-weight:700;color:#2F2C2C;display:flex;align-items:center;gap:8px}
+.detail-section-title svg{width:16px;height:16px;stroke:#03968F;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px;font-size:13px}
+.info-row{display:flex;gap:12px}
+.info-row .label{color:#9ca3af;min-width:90px;flex-shrink:0;font-weight:600}
+.info-row .val{color:#2F2C2C;font-weight:500}
+.info-row.full{grid-column:1 / -1}
+
+/* Placeholder */
+.placeholder-card{background:#fff;border:2px dashed #cbd5e1;border-radius:16px;padding:60px 30px;text-align:center;color:#64748b}
+.placeholder-card .pc-icon{margin-bottom:16px;display:flex;justify-content:center;color:#03968F;opacity:.6}
+.placeholder-card .pc-icon svg{width:48px;height:48px;stroke:currentColor;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.placeholder-card .pc-title{font-size:22px;font-weight:800;margin-bottom:8px;color:#334155;letter-spacing:-.3px}
+.placeholder-card .pc-desc{font-size:14px;line-height:1.6;margin-bottom:14px}
+.placeholder-card .pc-phase{display:inline-block;padding:5px 14px;background:#ecfdf5;color:#03968F;border-radius:12px;font-size:12px;font-weight:700}
+.placeholder-feature-list{margin:24px auto 0;max-width:520px;text-align:left;background:#f9fafb;border-radius:12px;padding:20px 24px;border:1px solid #e5e7eb}
+.placeholder-feature-list li{font-size:13px;color:#4b5563;margin-bottom:8px;list-style:none;padding-left:22px;position:relative;font-weight:500}
+.placeholder-feature-list li::before{content:"";position:absolute;left:0;top:6px;width:8px;height:8px;border-radius:50%;background:#e5e7eb}
+.placeholder-feature-list li.ready::before{background:#03968F;box-shadow:0 0 0 3px rgba(3,150,143,.15)}
+
+/* Toast */
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#2F2C2C;color:#fff;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;display:none;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:640px;width:90%;max-height:90vh;overflow-y:auto}
+
+/* Top Overlay (メニュー) */
+.top-overlay{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:400;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.top-overlay.open{display:flex}
+.top-overlay-content{background:#f9fafb;border-radius:24px;width:90%;max-width:860px;max-height:85vh;overflow-y:auto;padding:40px;box-shadow:0 24px 64px rgba(0,0,0,.2);animation:topSlideIn .3s ease;position:relative;border:1px solid #e5e7eb}
+@keyframes topSlideIn{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.top-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;position:relative}
+.top-title{font-family:"Noto Sans JP",sans-serif;font-weight:900;font-size:32px;letter-spacing:2px;color:#2F2C2C;margin:8px 0 28px}
+.top-section{margin-bottom:28px;width:100%;max-width:800px}
+.top-section-title{font-family:"Noto Sans JP",sans-serif;font-size:18px;font-weight:700;color:#2F2C2C;margin-bottom:12px;padding-left:4px}
+.top-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.top-card{background:#fff;border:2px solid #e5e7eb;border-radius:16px;padding:20px 16px;text-align:center;cursor:pointer;transition:all .15s;font-family:"Noto Sans JP",sans-serif;position:relative}
+.top-card:hover{border-color:#03968F;box-shadow:0 4px 12px rgba(3,150,143,.15)}
+.top-card.current{background:linear-gradient(135deg,#03968F 0%,#0AB8AE 100%);border-color:#03968F}
+.top-card.current .tc-name{color:#fff}
+.top-card .tc-name{font-size:17px;font-weight:700;color:#2F2C2C;display:flex;align-items:center;justify-content:center;gap:8px}
+.top-card .tc-name svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.top-card .tc-sub{font-size:11px;color:#6b7280;margin-top:4px;font-weight:500}
+.top-card.current .tc-sub{color:rgba(255,255,255,.9)}
+.top-card .tc-current-badge{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.25);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px}
+
+@keyframes dxspin{to{transform:rotate(360deg)}}
+
+@media (max-width:900px){
+  .info-grid{grid-template-columns:1fr}
+  .hero-card{flex-direction:column}
+  .content-area{padding:20px 16px 60px}
+  .top-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* === iPad 11インチ対応 === */
+@media(min-width:1025px) and (max-width:1300px){
+.sidebar{width:200px}
+.content-area{padding:24px 24px 14px}
+}
+@media(min-width:768px) and (max-width:1024px){
+.sidebar{width:180px}
+.content-area{padding:20px 20px 12px}
+button{min-height:36px}
+input,select,textarea{min-height:36px;font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ AUTH LOADING ============ -->
+<div id="auth-loading" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#f9fafb;z-index:9999;flex-direction:column;gap:20px">
+  <div style="width:56px;height:56px;border:4px solid #e5e7eb;border-top-color:#03968F;border-radius:50%;animation:dxspin 0.8s linear infinite"></div>
+  <div style="font-size:14px;color:#6b7280;font-weight:600">読み込み中…</div>
+</div>
+
+<!-- ============ AUTH VIEW ============ -->
+<div id="auth-view" style="display:none;height:100%;align-items:center;justify-content:center;background:#f9fafb;color:#1a1a1a">
+  <div style="background:#fff;color:#1a1a1a;padding:40px;border-radius:20px;max-width:420px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.08);border:1px solid #e5e7eb">
+    <h2 style="font-size:22px;margin-bottom:6px;color:#2F2C2C;text-align:center;font-weight:800">労務管理ログイン</h2>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:24px;line-height:1.6;text-align:center">DAIEI EXPRESS 労務管理システム</p>
+    <div style="text-align:left;margin:0 0 16px">
+      <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px">メールアドレス</label>
+      <input type="email" id="auth-email" placeholder="example@daiei.co.jp" style="width:100%;padding:11px 14px;border:1px solid #e5e7eb;border-radius:10px;font-family:inherit;font-size:14px;box-sizing:border-box">
+    </div>
+    <div style="text-align:left;margin:0 0 20px">
+      <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px">パスワード</label>
+      <input type="password" id="auth-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAuthLogin()" style="width:100%;padding:11px 14px;border:1px solid #e5e7eb;border-radius:10px;font-family:inherit;font-size:14px;box-sizing:border-box">
+    </div>
+    <button onclick="doAuthLogin()" style="width:100%;padding:13px;background:linear-gradient(135deg,#03968F 0%,#0AB8AE 100%);color:#fff;border:none;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:700;font-size:15px;box-shadow:0 4px 12px rgba(3,150,143,.25)">ログイン</button>
+    <div id="auth-error" style="color:#dc2626;font-size:13px;text-align:center;margin-top:12px;display:none"></div>
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid #f3f4f6;font-size:12px;color:#9ca3af;text-align:center">
+      <a href="index.html" onclick="event.preventDefault();location.href='index.html?t='+Date.now();return false;" style="color:#6b7280;text-decoration:none;font-weight:600">← 配車画面へ戻る</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" style="display:none">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-logo" onclick="showTopOverlay()" title="メニューを開く" style="cursor:pointer">
+      <div class="sb-logo-mark"><img id="sb-logo-img" alt="DEX"></div>
+      <div class="sb-logo-text">
+        <span class="sb-logo-main">DAIEI EXPRESS</span>
+        <span class="sb-logo-sub-text">LABOR</span>
+      </div>
+    </div>
+
+    <div class="sb-back-dispatch" onclick="goToDispatchHome()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <span>配車画面へ戻る</span>
+    </div>
+
+    <div class="sb-branch">
+      <span class="sb-branch-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </span>
+      <span class="sb-branch-label">拠点</span>
+      <select id="branch-select" class="sb-branch-select" onchange="changeBranch(this.value)">
+        <option value="osaka">大阪本社</option>
+        <option value="shiga">滋賀支店</option>
+        <option value="nagoya">名古屋支店</option>
+        <option value="all">全拠点（経営層向け）</option>
+      </select>
+      <svg class="sb-branch-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+
+    <div class="sb-section">勤怠・労務</div>
+    <div class="sb-item" data-view="dashboard" onclick="switchRView('dashboard')">
+      <span class="sb-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></span>
+      <span>ダッシュボード</span>
+    </div>
+    <div class="sb-item active" data-view="drivers" onclick="switchRView('drivers')">
+      <span class="sb-icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8zM5.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM18.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/></svg></span>
+      <span>運転者台帳</span>
+    </div>
+    <div class="sb-item" data-view="attendance" onclick="switchRView('attendance')">
+      <span class="sb-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+      <span>勤怠管理</span>
+    </div>
+    <div class="sb-item" data-view="kaizen" onclick="switchRView('kaizen')">
+      <span class="sb-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+      <span>改善基準告示</span>
+      <span class="sb-badge">3</span>
+    </div>
+    <div class="sb-item" data-view="shift" onclick="switchRView('shift')">
+      <span class="sb-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+      <span>シフト作成</span>
+    </div>
+
+    <div class="sb-section">給与・申請</div>
+    <div class="sb-item" data-view="payroll" onclick="switchRView('payroll')">
+      <span class="sb-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span>
+      <span>給与計算</span>
+    </div>
+    <div class="sb-item" data-view="leave" onclick="switchRView('leave')">
+      <span class="sb-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></span>
+      <span>有給管理</span>
+    </div>
+
+    <div class="sb-section">マスタ・帳票</div>
+    <div class="sb-item" data-view="employees" onclick="switchRView('employees')">
+      <span class="sb-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span>
+      <span>社員マスタ</span>
+    </div>
+    <div class="sb-item" data-view="reports" onclick="switchRView('reports')">
+      <span class="sb-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></span>
+      <span>帳票・レポート</span>
+    </div>
+
+    <div class="sb-logout" onclick="doLogout()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span>ログアウト</span>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+    <div class="content-area">
+      <div id="view-dashboard"  class="view"><div id="dashboard-body"></div></div>
+      <div id="view-drivers"    class="view active"><div id="drivers-body"></div></div>
+      <div id="view-attendance" class="view"><div id="attendance-body"></div></div>
+      <div id="view-kaizen"     class="view"><div id="kaizen-body"></div></div>
+      <div id="view-shift"      class="view"><div id="shift-body"></div></div>
+      <div id="view-payroll"    class="view"><div id="payroll-body"></div></div>
+      <div id="view-leave"      class="view"><div id="leave-body"></div></div>
+      <div id="view-employees"  class="view"><div id="employees-body"></div></div>
+      <div id="view-reports"    class="view"><div id="reports-body"></div></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div id="modal-overlay" class="modal-overlay" onmousedown="window._mdOnOverlay=(event.target===this)" onmouseup="if(window._mdOnOverlay&&event.target===this)closeModal();window._mdOnOverlay=false"></div>
+
+<div id="top-overlay" class="top-overlay" onmousedown="window._mdOnOverlay=(event.target===this)" onmouseup="if(window._mdOnOverlay&&event.target===this)hideTopOverlay();window._mdOnOverlay=false">
+  <div class="top-overlay-content" id="top-body"></div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-auth-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-database-compat.min.js"></script>
+
+<script>
+if(typeof firebase==='undefined'){
+  document.body.innerHTML='<div style="padding:40px;text-align:center;background:#fee2e2;color:#991b1b;font-family:sans-serif"><h2>Firebase SDK の読込に失敗しました</h2><p>ネットワーク接続をご確認ください。</p><p style="margin-top:20px"><a href="index.html" style="color:#03968F;font-weight:700">配車画面へ戻る</a></p></div>';
+  throw new Error('Firebase SDK not loaded');
+}
+firebase.initializeApp(FIREBASE_CONFIG);
+const db=firebase.database();
+const auth=firebase.auth();
+
+let currentStaffUser=null;
+let currentStaffData=null;
+
+/* ========== 拠点ラベル・色 (mgmt.html完全一致) ========== */
+const BRANCH_COLORS={all:'#6b7280',osaka:'#03968F',shiga:'#f59e0b',nagoya:'#8b5cf6'};
+const BRANCH_LABELS={all:'全拠点',osaka:'大阪本社',shiga:'滋賀支店',nagoya:'名古屋支店'};
+const BRANCH_SHORT ={all:'全拠点',osaka:'大阪',  shiga:'滋賀',  nagoya:'名古屋'};
+function getBranchColor(b){return BRANCH_COLORS[b]||'#6b7280';}
+function getBranchLabel(b){return BRANCH_LABELS[b]||b;}
+
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},2500);}
+function closeModal(){var o=document.getElementById('modal-overlay');o.classList.remove('open');o.innerHTML='';}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+/* ========== Top Overlay (メニュー) ========== */
+function showTopOverlay(){renderTopPage();document.getElementById('top-overlay').classList.add('open');}
+function hideTopOverlay(){document.getElementById('top-overlay').classList.remove('open');}
+function renderTopPage(){
+  var h='<div class="top-page" style="display:flex;flex-direction:column;align-items:center;position:relative">';
+  h+='<button onclick="hideTopOverlay()" style="position:absolute;top:0;right:0;background:none;border:none;font-size:28px;cursor:pointer;color:#9ca3af;font-weight:700">×</button>';
+  h+='<img src="'+DEX_LOGO+'" style="width:80px;height:80px;margin-bottom:20px">';
+  h+='<img src="'+DAIEI_LOGO+'" style="width:301px;height:40px;margin-bottom:40px">';
+
+  // 配車
+  h+='<div class="top-section"><div class="top-section-title">大阪本社</div><div class="top-grid">';
+  h+='<div class="top-card" onclick="gotoDispatch(\'honsha\')"><div class="tc-name">本社配車</div></div>';
+  h+='<div class="top-card" onclick="gotoDispatch(\'shiga\')"><div class="tc-name">滋賀幹線</div></div>';
+  h+='<div class="top-card" onclick="gotoDispatch(\'nagoya\')"><div class="tc-name">名古屋幹線</div></div>';
+  h+='<div class="top-card" onclick="gotoDispatch(\'kyushu\')"><div class="tc-name">九州便</div></div>';
+  h+='<div class="top-card" onclick="gotoDispatch(\'hokuriku\')"><div class="tc-name">北陸便</div></div>';
+  h+='<div class="top-card" onclick="gotoDispatch(\'kanto\')"><div class="tc-name">関東便</div></div>';
+  h+='<div class="top-card" onclick="gotoDispatch(\'akada\')"><div class="tc-name">赤田便</div></div>';
+  h+='</div></div>';
+
+  // 管理・経理・労務・車両
+  h+='<div class="top-section"><div class="top-section-title">管理・経理・労務・車両</div><div class="top-grid">';
+  h+='<div class="top-card" onclick="location.href=\'mgmt.html?t=\'+Date.now()"><div class="tc-name">管理・経理</div></div>';
+  h+='<div class="top-card active" onclick="hideTopOverlay()"><div class="tc-name">労務</div></div>';
+  h+='<div class="top-card" onclick="location.href=\'shako.html?t=\'+Date.now()"><div class="tc-name">車両管理</div></div>';
+  h+='</div></div>';
+
+  h+='</div>';
+  document.getElementById('top-body').innerHTML=h;
+}
+function goToDispatchHome(){location.href='index.html?t='+Date.now();}
+function gotoDispatch(route){location.href='index.html?r='+encodeURIComponent(route)+'&t='+Date.now();}
+
+/* ========== 拠点切替 ========== */
+function changeBranch(b){
+  currentBranch=b;
+  localStorage.setItem('dex_mgmt_branch',b);
+  showToast('拠点：'+getBranchLabel(b));
+  state.selectedDriverId=null;
+  renderActive();
+}
+
+/* ========== 認証 ========== */
+function doAuthLogin(){
+  var email=(document.getElementById('auth-email')?.value||'').trim();
+  var pwd=document.getElementById('auth-password')?.value||'';
+  var errEl=document.getElementById('auth-error');
+  if(!email||!pwd){if(errEl){errEl.textContent='メールアドレスとパスワードを入力してください';errEl.style.display='block';}return;}
+  if(errEl)errEl.style.display='none';
+  firebase.auth().signInWithEmailAndPassword(email,pwd).catch(function(e){
+    if(errEl){
+      var msg='ログインに失敗しました';
+      if(e.code==='auth/invalid-email')msg='メールアドレスの形式が正しくありません';
+      else if(e.code==='auth/user-not-found'||e.code==='auth/wrong-password'||e.code==='auth/invalid-credential')msg='メールアドレスまたはパスワードが違います';
+      else if(e.code==='auth/too-many-requests')msg='試行回数が多すぎます。しばらくしてからお試しください';
+      errEl.textContent=msg;errEl.style.display='block';
+    }
+  });
+}
+function doLogout(){
+  if(!confirm('ログアウトしますか？'))return;
+  firebase.auth().signOut().then(function(){location.href='index.html';});
+}
+
+auth.onAuthStateChanged(function(user){
+  var loader=document.getElementById('auth-loading');
+  if(loader)loader.style.display='none';
+  if(user){
+    currentStaffUser=user;
+    db.ref('staff/'+user.uid).once('value').then(function(snap){
+      if(!snap.val()){
+        // 開発中：staffレコードがなくてもアプリを起動（本番ではコメントアウト）
+        console.warn('staff record not found, starting in dev mode');
+        startApp();
+        return;
+      }
+      currentStaffData=snap.val();
+      if(currentStaffData.isActive===false){
+        auth.signOut();alert('このアカウントは現在無効化されています。');return;
+      }
+      startApp();
+    }).catch(function(err){
+      console.warn('staff read failed, starting in dev mode:',err);
+      startApp();
+    });
+  }else{
+    document.getElementById('auth-view').style.display='flex';
+  }
+});
+
+function startApp(){
+  document.getElementById('app').style.display='flex';
+  document.getElementById('auth-view').style.display='none';
+  var logoEl=document.getElementById('sb-logo-img');
+  if(logoEl)logoEl.src=DEX_LOGO;
+  var sel=document.getElementById('branch-select');
+  if(sel)sel.value=currentBranch;
+  switchRView('drivers');
+}
+
+/* ========== ビュー切替 ========== */
+function switchRView(v){
+  document.querySelectorAll('.sb-item').forEach(function(el){el.classList.toggle('active',el.dataset.view===v);});
+  document.querySelectorAll('.view').forEach(function(el){el.classList.remove('active');});
+  var target=document.getElementById('view-'+v);
+  if(target)target.classList.add('active');
+  state.view=v;
+  state.selectedDriverId=null;
+  history.replaceState(null,'','#'+v);
+  renderActive();
+}
+function renderActive(){
+  switch(state.view){
+    case 'dashboard':  renderDashboard();  break;
+    case 'drivers':    renderDriversView(); break;
+    case 'attendance': renderPlaceholder('attendance'); break;
+    case 'kaizen':     renderPlaceholder('kaizen');     break;
+    case 'shift':      renderPlaceholder('shift');      break;
+    case 'payroll':    renderPlaceholder('payroll');    break;
+    case 'leave':      renderPlaceholder('leave');      break;
+    case 'employees':  renderPlaceholder('employees');  break;
+    case 'reports':    renderPlaceholder('reports');    break;
+  }
+}
+
+/* ================ 運転者データ（30名） ================ */
+const DRIVERS=[
+  { id:1,  name:'東本 和史', kana:'ヒガシモト カズフミ', branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'B',  status:'就業中', hireDate:'1992/03/21', birthDate:'1972/01/14', appointDate:'1992/03/21', address:'〒555-0033 大阪府大阪市西淀川区姫島 4-9-7-301', phone:'090-3567-9616', rate:0,   licenseNo:'708800513670', licenseExpiry:'2029/02/14', licenseType:'中型',  licenseCond:'眼鏡等', qualifications:['運行管理者'], license:{status:'ok',daysLeft:1035}, aptitude:{status:'warn',last:'2023/04/15',next:'2026/04/15',grade:'B'}, violation:{count3y:1,accident3y:0,lastDate:'2024/08',lastType:'一時停止違反',safeDays:412}, education:{done:9,total:12,missing:['健康管理','危険物','防火']}, health:{checkup:'2025/10',stress:'pending',sas:'na'}, kaizen:{month:248,limit:284,restViolation:0,continuousViolation:0} },
+  { id:2,  name:'山田 太郎', kana:'ヤマダ タロウ',       branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'A',  status:'就業中', hireDate:'2008/04/01', birthDate:'1978/05/20', appointDate:'2008/04/01', address:'〒530-0001 大阪府大阪市北区梅田 1-2-3', phone:'090-1234-5678', rate:3.5, licenseNo:'521100823456', licenseExpiry:'2027/05/20', licenseType:'大型',  licenseCond:'',       qualifications:['玉掛','フォークリフト'], license:{status:'ok',daysLeft:390}, aptitude:{status:'ok',last:'2024/09/10',next:'2027/09/10',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:1250}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/09',stress:'2025/10',sas:'2024/12'}, kaizen:{month:262,limit:284,restViolation:0,continuousViolation:0} },
+  { id:3,  name:'佐藤 次郎', kana:'サトウ ジロウ',       branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'O',  status:'就業中', hireDate:'2012/06/15', birthDate:'1985/11/03', appointDate:'2012/06/15', address:'〒541-0048 大阪府大阪市中央区瓦町 2-5-1', phone:'090-2345-6789', rate:4.0, licenseNo:'521100834567', licenseExpiry:'2028/11/03', licenseType:'大型',  licenseCond:'',       qualifications:['けん引','運行管理者'], license:{status:'ok',daysLeft:560}, aptitude:{status:'ok',last:'2024/11/20',next:'2027/11/20',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:1890}, education:{done:11,total:12,missing:['防火']}, health:{checkup:'2025/08',stress:'2025/10',sas:'2025/03'}, kaizen:{month:271,limit:284,restViolation:0,continuousViolation:0} },
+  { id:4,  name:'鈴木 三郎', kana:'スズキ サブロウ',     branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'A',  status:'就業中', hireDate:'2015/09/01', birthDate:'1989/02/14', appointDate:'2015/09/01', address:'〒550-0013 大阪府大阪市西区新町 3-4-5', phone:'090-3456-7890', rate:3.8, licenseNo:'521100845678', licenseExpiry:'2026/06/10', licenseType:'中型',  licenseCond:'眼鏡等', qualifications:[], license:{status:'warn',daysLeft:48}, aptitude:{status:'ok',last:'2024/03/15',next:'2027/03/15',grade:'B'}, violation:{count3y:1,accident3y:0,lastDate:'2025/02',lastType:'速度超過',safeDays:85}, education:{done:10,total:12,missing:['健康管理','防火']}, health:{checkup:'2025/09',stress:'pending',sas:'na'}, kaizen:{month:256,limit:284,restViolation:0,continuousViolation:0} },
+  { id:5,  name:'高橋 四郎', kana:'タカハシ シロウ',     branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'AB', status:'就業中', hireDate:'2010/10/01', birthDate:'1980/07/25', appointDate:'2010/10/01', address:'〒556-0017 大阪府大阪市浪速区湊町 1-3-3', phone:'090-4567-8901', rate:4.2, licenseNo:'521100856789', licenseExpiry:'2028/07/25', licenseType:'大型',  licenseCond:'',       qualifications:['けん引','危険物'], license:{status:'ok',daysLeft:450}, aptitude:{status:'ok',last:'2025/01/20',next:'2028/01/20',grade:'A'}, violation:{count3y:0,accident3y:1,lastDate:'2023/11',lastType:'追突（軽微）',safeDays:520}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/08',stress:'2025/10',sas:'2025/02'}, kaizen:{month:265,limit:284,restViolation:0,continuousViolation:0} },
+  { id:6,  name:'伊藤 五郎', kana:'イトウ ゴロウ',       branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'O',  status:'就業中', hireDate:'2018/04/01', birthDate:'1992/12/08', appointDate:'2018/04/01', address:'〒532-0011 大阪府大阪市淀川区西中島 5-6-7', phone:'090-5678-9012', rate:3.2, licenseNo:'521100867890', licenseExpiry:'2029/12/08', licenseType:'中型',  licenseCond:'',       qualifications:[], license:{status:'ok',daysLeft:960}, aptitude:{status:'ok',last:'2024/05/08',next:'2027/05/08',grade:'B'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:720}, education:{done:8,total:12,missing:['健康管理','危険物','防火','運転姿勢']}, health:{checkup:'2025/09',stress:'pending',sas:'na'}, kaizen:{month:280,limit:284,restViolation:1,continuousViolation:0} },
+  { id:7,  name:'渡辺 六郎', kana:'ワタナベ ロクロウ',   branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'A',  status:'就業中', hireDate:'2005/07/01', birthDate:'1975/03/30', appointDate:'2005/07/01', address:'〒547-0014 大阪府大阪市平野区長吉 2-1-1', phone:'090-6789-0123', rate:4.5, licenseNo:'521100878901', licenseExpiry:'2027/03/30', licenseType:'大型',  licenseCond:'',       qualifications:['けん引','運行管理者'], license:{status:'ok',daysLeft:340}, aptitude:{status:'ok',last:'2024/07/10',next:'2027/07/10',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:2100}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/08',stress:'2025/10',sas:'2025/01'}, kaizen:{month:258,limit:284,restViolation:0,continuousViolation:0} },
+  { id:8,  name:'中村 七郎', kana:'ナカムラ シチロウ',   branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'B',  status:'就業中', hireDate:'2020/04/01', birthDate:'1995/08/18', appointDate:'2020/04/01', address:'〒542-0082 大阪府大阪市中央区島之内 1-2-3', phone:'090-7890-1234', rate:2.8, licenseNo:'521100889012', licenseExpiry:'2028/08/18', licenseType:'中型',  licenseCond:'',       qualifications:[], license:{status:'ok',daysLeft:480}, aptitude:{status:'ok',last:'2024/10/05',next:'2027/10/05',grade:'B'}, violation:{count3y:1,accident3y:0,lastDate:'2024/04',lastType:'駐車違反',safeDays:315}, education:{done:7,total:12,missing:['健康管理','危険物','防火','運転姿勢','応急処置']}, health:{checkup:'2025/10',stress:'pending',sas:'na'}, kaizen:{month:245,limit:284,restViolation:0,continuousViolation:0} },
+  { id:9,  name:'小林 八郎', kana:'コバヤシ ハチロウ',   branch:'osaka',  dept:'運送部門', role:'運行管理者',     gender:'男', blood:'O',  status:'就業中', hireDate:'1998/04/01', birthDate:'1968/06/12', appointDate:'1998/04/01', address:'〒530-0047 大阪府大阪市北区西天満 4-5-6', phone:'090-8901-2345', rate:0,   licenseNo:'521100890123', licenseExpiry:'2027/06/12', licenseType:'大型',  licenseCond:'',       qualifications:['運行管理者','整備管理者'], license:{status:'ok',daysLeft:420}, aptitude:{status:'ok',last:'2024/06/12',next:'2027/06/12',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:3100}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/07',stress:'2025/10',sas:'2024/11'}, kaizen:{month:0,limit:284,restViolation:0,continuousViolation:0} },
+  { id:10, name:'加藤 美咲', kana:'カトウ ミサキ',       branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'女', blood:'A',  status:'就業中', hireDate:'2021/07/01', birthDate:'1994/09/22', appointDate:'2021/07/01', address:'〒531-0071 大阪府大阪市北区中津 3-4-5', phone:'090-9012-3456', rate:3.0, licenseNo:'521100901234', licenseExpiry:'2028/09/22', licenseType:'中型',  licenseCond:'',       qualifications:[], license:{status:'ok',daysLeft:515}, aptitude:{status:'ok',last:'2025/02/01',next:'2028/02/01',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:580}, education:{done:11,total:12,missing:['危険物']}, health:{checkup:'2025/09',stress:'2025/10',sas:'na'}, kaizen:{month:238,limit:284,restViolation:0,continuousViolation:0} },
+  { id:11, name:'吉田 健',   kana:'ヨシダ ケン',         branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'A',  status:'就業中', hireDate:'2013/02/01', birthDate:'1983/04/17', appointDate:'2013/02/01', address:'〒530-0041 大阪府大阪市北区天神橋 6-1-2', phone:'090-0123-4567', rate:3.7, licenseNo:'521100912345', licenseExpiry:'2027/04/17', licenseType:'大型',  licenseCond:'',       qualifications:['けん引'], license:{status:'ok',daysLeft:360}, aptitude:{status:'ok',last:'2024/04/17',next:'2027/04/17',grade:'B'}, violation:{count3y:2,accident3y:0,lastDate:'2025/01',lastType:'速度超過',safeDays:110}, education:{done:10,total:12,missing:['健康管理','防火']}, health:{checkup:'2025/08',stress:'2025/10',sas:'na'}, kaizen:{month:275,limit:284,restViolation:0,continuousViolation:1} },
+  { id:12, name:'山本 誠',   kana:'ヤマモト マコト',     branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'B',  status:'就業中', hireDate:'2017/08/01', birthDate:'1990/10/11', appointDate:'2017/08/01', address:'〒558-0041 大阪府大阪市住吉区南住吉 2-3-4', phone:'090-1357-9246', rate:3.3, licenseNo:'521100923456', licenseExpiry:'2028/10/11', licenseType:'準中型', licenseCond:'',       qualifications:[], license:{status:'ok',daysLeft:530}, aptitude:{status:'ok',last:'2024/08/11',next:'2027/08/11',grade:'B'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:890}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/10',stress:'pending',sas:'na'}, kaizen:{month:242,limit:284,restViolation:0,continuousViolation:0} },
+  { id:13, name:'松本 浩',   kana:'マツモト ヒロシ',     branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'O',  status:'就業中', hireDate:'2003/11/01', birthDate:'1973/12/05', appointDate:'2003/11/01', address:'〒545-0001 大阪府大阪市阿倍野区天王寺町 1-2-3', phone:'090-2468-1357', rate:4.3, licenseNo:'521100934567', licenseExpiry:'2028/12/05', licenseType:'中型',  licenseCond:'眼鏡等', qualifications:['玉掛'], license:{status:'ok',daysLeft:585}, aptitude:{status:'ok',last:'2024/12/05',next:'2027/12/05',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:1650}, education:{done:11,total:12,missing:['応急処置']}, health:{checkup:'2025/09',stress:'2025/10',sas:'2025/04'}, kaizen:{month:260,limit:284,restViolation:0,continuousViolation:0} },
+  { id:14, name:'井上 隆',   kana:'イノウエ タカシ',     branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'A',  status:'休職中', hireDate:'2006/03/01', birthDate:'1976/01/29', appointDate:'2006/03/01', address:'〒543-0021 大阪府大阪市天王寺区東高津町 3-4-5', phone:'090-3579-2468', rate:0,   licenseNo:'521100945678', licenseExpiry:'2027/01/29', licenseType:'大型',  licenseCond:'',       qualifications:['けん引'], license:{status:'ok',daysLeft:280}, aptitude:{status:'ok',last:'2024/01/29',next:'2027/01/29',grade:'B'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:0}, education:{done:6,total:12,missing:['健康管理','危険物','防火','運転姿勢','応急処置','エコドライブ']}, health:{checkup:'pending',stress:'pending',sas:'na'}, kaizen:{month:0,limit:284,restViolation:0,continuousViolation:0} },
+  { id:15, name:'木村 隆司', kana:'キムラ タカシ',       branch:'osaka',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'B',  status:'就業中', hireDate:'2019/10/01', birthDate:'1993/05/15', appointDate:'2019/10/01', address:'〒547-0003 大阪府大阪市平野区加美鞍作 2-1-1', phone:'090-4680-2468', rate:3.1, licenseNo:'521100956789', licenseExpiry:'2028/05/15', licenseType:'中型',  licenseCond:'',       qualifications:[], license:{status:'ok',daysLeft:390}, aptitude:{status:'ok',last:'2024/05/15',next:'2027/05/15',grade:'B'}, violation:{count3y:1,accident3y:0,lastDate:'2024/12',lastType:'信号無視',safeDays:150}, education:{done:9,total:12,missing:['健康管理','危険物','防火']}, health:{checkup:'2025/10',stress:'pending',sas:'na'}, kaizen:{month:250,limit:284,restViolation:0,continuousViolation:0} },
+  { id:16, name:'林 大輔',     kana:'ハヤシ ダイスケ',   branch:'shiga',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'A',  status:'就業中', hireDate:'2011/05/01', birthDate:'1982/08/23', appointDate:'2011/05/01', address:'〒520-0051 滋賀県大津市梅林 1-2-3', phone:'090-1111-2222', rate:3.9, licenseNo:'251100123456', licenseExpiry:'2027/08/23', licenseType:'大型',  licenseCond:'',       qualifications:['運行管理者'], license:{status:'ok',daysLeft:475}, aptitude:{status:'ok',last:'2024/08/23',next:'2027/08/23',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:1480}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/09',stress:'2025/10',sas:'2025/02'}, kaizen:{month:268,limit:284,restViolation:0,continuousViolation:0} },
+  { id:17, name:'清水 健一',   kana:'シミズ ケンイチ',   branch:'shiga',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'O',  status:'就業中', hireDate:'2014/09/01', birthDate:'1987/03/07', appointDate:'2014/09/01', address:'〒520-2153 滋賀県大津市一里山 3-4-5', phone:'090-2222-3333', rate:3.5, licenseNo:'251100234567', licenseExpiry:'2028/03/07', licenseType:'中型',  licenseCond:'眼鏡等', qualifications:[], license:{status:'ok',daysLeft:330}, aptitude:{status:'ok',last:'2024/03/07',next:'2027/03/07',grade:'B'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:1100}, education:{done:11,total:12,missing:['応急処置']}, health:{checkup:'2025/09',stress:'2025/10',sas:'na'}, kaizen:{month:255,limit:284,restViolation:0,continuousViolation:0} },
+  { id:18, name:'森田 雄二',   kana:'モリタ ユウジ',     branch:'shiga',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'A',  status:'就業中', hireDate:'2009/11/01', birthDate:'1979/11/11', appointDate:'2009/11/01', address:'〒522-0004 滋賀県彦根市鳥居本町 2-3-4', phone:'090-3333-4444', rate:4.1, licenseNo:'251100345678', licenseExpiry:'2026/11/11', licenseType:'大型',  licenseCond:'',       qualifications:['けん引','危険物'], license:{status:'warn',daysLeft:201}, aptitude:{status:'warn',last:'2023/11/11',next:'2026/05/11',grade:'B'}, violation:{count3y:1,accident3y:0,lastDate:'2024/10',lastType:'速度超過',safeDays:205}, education:{done:10,total:12,missing:['健康管理','防火']}, health:{checkup:'2025/08',stress:'2025/10',sas:'2024/12'}, kaizen:{month:272,limit:284,restViolation:0,continuousViolation:0} },
+  { id:19, name:'西川 哲也',   kana:'ニシカワ テツヤ',   branch:'shiga',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'B',  status:'就業中', hireDate:'2016/04/01', birthDate:'1988/07/30', appointDate:'2016/04/01', address:'〒525-0025 滋賀県草津市西渋川 1-5-6', phone:'090-4444-5555', rate:3.4, licenseNo:'251100456789', licenseExpiry:'2028/07/30', licenseType:'中型',  licenseCond:'',       qualifications:[], license:{status:'ok',daysLeft:465}, aptitude:{status:'ok',last:'2024/07/30',next:'2027/07/30',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:820}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/09',stress:'2025/10',sas:'na'}, kaizen:{month:247,limit:284,restViolation:0,continuousViolation:0} },
+  { id:20, name:'坂本 修',     kana:'サカモト オサム',   branch:'shiga',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'O',  status:'就業中', hireDate:'2004/02/01', birthDate:'1974/02/19', appointDate:'2004/02/01', address:'〒523-0063 滋賀県近江八幡市十王町 7-8', phone:'090-5555-6666', rate:4.4, licenseNo:'251100567890', licenseExpiry:'2028/02/19', licenseType:'大型',  licenseCond:'',       qualifications:['けん引','運行管理者'], license:{status:'ok',daysLeft:300}, aptitude:{status:'ok',last:'2024/02/19',next:'2027/02/19',grade:'A'}, violation:{count3y:0,accident3y:1,lastDate:'2024/05',lastType:'軽微な物損',safeDays:340}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/08',stress:'2025/10',sas:'2025/03'}, kaizen:{month:263,limit:284,restViolation:0,continuousViolation:0} },
+  { id:21, name:'池田 正男',   kana:'イケダ マサオ',     branch:'shiga',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'A',  status:'就業中', hireDate:'2001/08/01', birthDate:'1970/04/05', appointDate:'2001/08/01', address:'〒524-0004 滋賀県守山市笠原町 9-10', phone:'090-6666-7777', rate:4.6, licenseNo:'251100678901', licenseExpiry:'2029/04/05', licenseType:'大型',  licenseCond:'',       qualifications:['けん引','運行管理者','整備管理者'], license:{status:'ok',daysLeft:710}, aptitude:{status:'ok',last:'2024/04/05',next:'2026/10/05',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:2800}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/07',stress:'2025/10',sas:'2024/10'}, kaizen:{month:270,limit:284,restViolation:0,continuousViolation:0} },
+  { id:22, name:'藤田 拓海',   kana:'フジタ タクミ',     branch:'shiga',  dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'AB', status:'就業中', hireDate:'2022/04/01', birthDate:'1998/01/25', appointDate:'2022/04/01', address:'〒526-0011 滋賀県長浜市八幡東町 4-5', phone:'090-7777-8888', rate:2.5, licenseNo:'251100789012', licenseExpiry:'2028/01/25', licenseType:'準中型', licenseCond:'',       qualifications:[], license:{status:'ok',daysLeft:275}, aptitude:{status:'ok',last:'2025/01/25',next:'2028/01/25',grade:'B'}, violation:{count3y:1,accident3y:0,lastDate:'2025/03',lastType:'一時停止違反',safeDays:60}, education:{done:6,total:12,missing:['健康管理','危険物','防火','運転姿勢','応急処置','エコドライブ']}, health:{checkup:'2025/10',stress:'pending',sas:'na'}, kaizen:{month:235,limit:284,restViolation:0,continuousViolation:0} },
+  { id:23, name:'岡田 さゆり', kana:'オカダ サユリ',     branch:'shiga',  dept:'運送部門', role:'常時選任運転者', gender:'女', blood:'O',  status:'就業中', hireDate:'2020/09/01', birthDate:'1991/06/18', appointDate:'2020/09/01', address:'〒525-0064 滋賀県草津市矢橋町 6-7', phone:'090-8888-9999', rate:2.9, licenseNo:'251100890123', licenseExpiry:'2027/06/18', licenseType:'中型',  licenseCond:'',       qualifications:[], license:{status:'ok',daysLeft:420}, aptitude:{status:'ok',last:'2024/06/18',next:'2027/06/18',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:690}, education:{done:11,total:12,missing:['危険物']}, health:{checkup:'2025/09',stress:'2025/10',sas:'na'}, kaizen:{month:245,limit:284,restViolation:0,continuousViolation:0} },
+  { id:24, name:'前田 浩司',   kana:'マエダ コウジ',     branch:'nagoya', dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'B',  status:'就業中', hireDate:'2008/07/01', birthDate:'1981/09/14', appointDate:'2008/07/01', address:'〒460-0008 愛知県名古屋市中区栄 1-2-3', phone:'090-9999-0000', rate:4.0, licenseNo:'341100123456', licenseExpiry:'2027/09/14', licenseType:'大型',  licenseCond:'',       qualifications:['けん引','運行管理者'], license:{status:'ok',daysLeft:510}, aptitude:{status:'ok',last:'2024/09/14',next:'2027/09/14',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:1400}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/09',stress:'2025/10',sas:'2025/02'}, kaizen:{month:266,limit:284,restViolation:0,continuousViolation:0} },
+  { id:25, name:'橋本 洋一',   kana:'ハシモト ヨウイチ', branch:'nagoya', dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'A',  status:'就業中', hireDate:'2013/10/01', birthDate:'1986/11/26', appointDate:'2013/10/01', address:'〒464-0819 愛知県名古屋市千種区四谷通 3-4', phone:'080-1234-5678', rate:3.6, licenseNo:'341100234567', licenseExpiry:'2026/11/26', licenseType:'中型',  licenseCond:'',       qualifications:[], license:{status:'warn',daysLeft:216}, aptitude:{status:'warn',last:'2023/11/26',next:'2026/05/26',grade:'B'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:1050}, education:{done:10,total:12,missing:['健康管理','防火']}, health:{checkup:'2025/10',stress:'pending',sas:'na'}, kaizen:{month:251,limit:284,restViolation:0,continuousViolation:0} },
+  { id:26, name:'石井 翔太',   kana:'イシイ ショウタ',   branch:'nagoya', dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'O',  status:'就業中', hireDate:'2019/04/01', birthDate:'1992/02/14', appointDate:'2019/04/01', address:'〒453-0015 愛知県名古屋市中村区椿町 5-6', phone:'080-2345-6789', rate:3.2, licenseNo:'341100345678', licenseExpiry:'2028/02/14', licenseType:'中型',  licenseCond:'',       qualifications:[], license:{status:'ok',daysLeft:295}, aptitude:{status:'ok',last:'2024/02/14',next:'2027/02/14',grade:'B'}, violation:{count3y:1,accident3y:0,lastDate:'2024/11',lastType:'速度超過',safeDays:170}, education:{done:9,total:12,missing:['健康管理','危険物','防火']}, health:{checkup:'2025/10',stress:'pending',sas:'na'}, kaizen:{month:259,limit:284,restViolation:0,continuousViolation:0} },
+  { id:27, name:'斉藤 光',     kana:'サイトウ ヒカル',   branch:'nagoya', dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'A',  status:'就業中', hireDate:'2007/06/01', birthDate:'1977/05/08', appointDate:'2007/06/01', address:'〒450-0002 愛知県名古屋市中村区名駅 7-8-9', phone:'080-3456-7890', rate:4.3, licenseNo:'341100456789', licenseExpiry:'2028/05/08', licenseType:'大型',  licenseCond:'',       qualifications:['けん引','危険物'], license:{status:'ok',daysLeft:380}, aptitude:{status:'ok',last:'2024/05/08',next:'2027/05/08',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:1950}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/08',stress:'2025/10',sas:'2024/11'}, kaizen:{month:268,limit:284,restViolation:0,continuousViolation:0} },
+  { id:28, name:'柴田 勝',     kana:'シバタ マサル',     branch:'nagoya', dept:'運送部門', role:'常時選任運転者', gender:'男', blood:'B',  status:'就業中', hireDate:'2002/04/01', birthDate:'1971/08/03', appointDate:'2002/04/01', address:'〒462-0825 愛知県名古屋市北区大曽根 3-4-5', phone:'080-4567-8901', rate:4.5, licenseNo:'341100567890', licenseExpiry:'2026/08/03', licenseType:'大型',  licenseCond:'眼鏡等', qualifications:['けん引','運行管理者'], license:{status:'warn',daysLeft:102}, aptitude:{status:'ok',last:'2024/08/03',next:'2026/08/03',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:2500}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/07',stress:'2025/10',sas:'2024/09'}, kaizen:{month:276,limit:284,restViolation:0,continuousViolation:0} },
+  { id:29, name:'原田 麻美',   kana:'ハラダ アサミ',     branch:'nagoya', dept:'運送部門', role:'常時選任運転者', gender:'女', blood:'A',  status:'就業中', hireDate:'2021/03/01', birthDate:'1993/10/12', appointDate:'2021/03/01', address:'〒465-0093 愛知県名古屋市名東区一社 1-2', phone:'080-5678-9012', rate:2.8, licenseNo:'341100678901', licenseExpiry:'2027/10/12', licenseType:'中型',  licenseCond:'',       qualifications:[], license:{status:'ok',daysLeft:540}, aptitude:{status:'ok',last:'2024/10/12',next:'2027/10/12',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:470}, education:{done:11,total:12,missing:['危険物']}, health:{checkup:'2025/09',stress:'2025/10',sas:'na'}, kaizen:{month:240,limit:284,restViolation:0,continuousViolation:0} },
+  { id:30, name:'内田 敏夫',   kana:'ウチダ トシオ',     branch:'nagoya', dept:'運送部門', role:'運行管理者',     gender:'男', blood:'O',  status:'就業中', hireDate:'1995/09/01', birthDate:'1965/12/28', appointDate:'1995/09/01', address:'〒461-0001 愛知県名古屋市東区泉 2-3-4', phone:'080-6789-0123', rate:0,   licenseNo:'341100789012', licenseExpiry:'2028/12/28', licenseType:'大型',  licenseCond:'',       qualifications:['運行管理者','整備管理者','危険物'], license:{status:'ok',daysLeft:615}, aptitude:{status:'ok',last:'2025/03/28',next:'2027/03/28',grade:'A'}, violation:{count3y:0,accident3y:0,lastDate:'',lastType:'',safeDays:3650}, education:{done:12,total:12,missing:[]}, health:{checkup:'2025/06',stress:'2025/10',sas:'2024/08'}, kaizen:{month:0,limit:284,restViolation:0,continuousViolation:0} }
+];
+
+/* ========== 状態 ========== */
+const state={view:'drivers',selectedDriverId:null,search:'',filter:'all'};
+
+/* ========== ユーティリティ ========== */
+function getInitial(name){return name.split(' ')[0].charAt(0);}
+function getAge(birthStr){var b=new Date(birthStr.replace(/\//g,'-'));var now=new Date();var age=now.getFullYear()-b.getFullYear();var m=now.getMonth()-b.getMonth();if(m<0||(m===0&&now.getDate()<b.getDate()))age--;return age;}
+function getYearsOfService(hireStr){var h=new Date(hireStr.replace(/\//g,'-'));return Math.floor((new Date()-h)/(1000*60*60*24*365.25));}
+function filteredDrivers(){
+  var list=DRIVERS.slice();
+  if(currentBranch!=='all')list=list.filter(function(d){return d.branch===currentBranch;});
+  if(state.search){
+    var q=state.search.toLowerCase();
+    list=list.filter(function(d){return d.name.toLowerCase().indexOf(q)>=0||d.kana.toLowerCase().indexOf(q)>=0||String(d.id).indexOf(q)>=0;});
+  }
+  if(state.filter==='alert')list=list.filter(hasAlert);
+  else if(state.filter==='onduty')list=list.filter(function(d){return d.status==='就業中';});
+  else if(state.filter==='rest')list=list.filter(function(d){return d.status==='休職中';});
+  return list;
+}
+function hasAlert(d){return d.license.status!=='ok'||d.aptitude.status!=='ok'||d.health.stress==='pending'||d.education.done<d.education.total||d.kaizen.restViolation>0||d.kaizen.continuousViolation>0||(d.kaizen.month/d.kaizen.limit)>0.95;}
+function countAlerts(d){var c=0;if(d.license.status!=='ok')c++;if(d.aptitude.status!=='ok')c++;if(d.health.stress==='pending')c++;if(d.education.done<d.education.total)c++;if(d.kaizen.restViolation>0)c++;if(d.kaizen.continuousViolation>0)c++;if((d.kaizen.month/d.kaizen.limit)>0.95)c++;return c;}
+function filteredDriversCount(f){var orig=state.filter;state.filter=f;var c=filteredDrivers().length;state.filter=orig;return c;}
+
+/* ========== 運転者台帳 ========== */
+function renderDriversView(){
+  var el=document.getElementById('drivers-body');
+  if(state.selectedDriverId){el.innerHTML=renderDriverDetail();}
+  else{el.innerHTML=renderDriverList();}
+}
+function selectDriver(id){state.selectedDriverId=id;renderDriversView();}
+function backToList(){state.selectedDriverId=null;renderDriversView();}
+function setFilter(f){state.filter=f;renderDriversView();}
+
+function renderDriverList(){
+  var list=filteredDrivers();
+  var h='';
+  h+='<div class="page-header">';
+  h+='<div class="ph-left"><h1><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#03968F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8zM5.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM18.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/></svg>運転者台帳<span class="badge badge-teal" style="font-size:11px">'+getBranchLabel(currentBranch)+'</span></h1>';
+  h+='<div class="ph-sub">運転者の免許・適性診断・教育状況を一元管理</div></div>';
+  h+='<div class="ph-right">';
+  h+='<button class="btn"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>CSV出力</button>';
+  h+='<button class="btn btn-primary"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>新規登録</button>';
+  h+='</div></div>';
+
+  h+='<div class="toolbar">';
+  h+='<input type="text" class="search-input" placeholder="🔍 氏名・カナ・IDで検索" value="'+esc(state.search)+'" oninput="state.search=this.value;renderDriversView();">';
+  h+='<span class="filter-tag '+(state.filter==='all'?'active':'')+'"    onclick="setFilter(\'all\')">すべて ('+filteredDriversCount('all')+')</span>';
+  h+='<span class="filter-tag '+(state.filter==='alert'?'active':'')+'"  onclick="setFilter(\'alert\')">要対応 ('+filteredDriversCount('alert')+')</span>';
+  h+='<span class="filter-tag '+(state.filter==='onduty'?'active':'')+'" onclick="setFilter(\'onduty\')">就業中 ('+filteredDriversCount('onduty')+')</span>';
+  h+='<span class="filter-tag '+(state.filter==='rest'?'active':'')+'"   onclick="setFilter(\'rest\')">休職中 ('+filteredDriversCount('rest')+')</span>';
+  h+='<div style="margin-left:auto;color:#6b7280;font-size:12px;font-weight:600">'+list.length+'名を表示</div>';
+  h+='</div>';
+
+  h+='<table class="driver-table">';
+  h+='<thead><tr>';
+  h+='<th style="width:26%">ドライバー</th><th style="width:80px">拠点</th><th style="width:90px">免許</th>';
+  h+='<th>ステータス</th><th style="width:140px">今月拘束時間</th><th style="width:90px">無事故</th>';
+  h+='<th style="width:60px;text-align:center">警告</th>';
+  h+='</tr></thead><tbody>';
+
+  for(var i=0;i<list.length;i++){
+    var d=list[i];
+    var kaizenPct=Math.round((d.kaizen.month/d.kaizen.limit)*100);
+    var kaizenCls=kaizenPct>95?'danger':kaizenPct>85?'warn':'ok';
+    var alertCount=countAlerts(d);
+    var statusBadge=d.status==='就業中'?'<span class="badge badge-success">就業中</span>':'<span class="badge badge-gray">休職中</span>';
+    var branchColor=BRANCH_COLORS[d.branch];
+    h+='<tr onclick="selectDriver('+d.id+')">';
+    h+='<td><div class="driver-cell"><div class="avatar">'+esc(getInitial(d.name))+'</div><div style="min-width:0"><div class="driver-name">'+esc(d.name)+'</div><div class="driver-kana">'+esc(d.kana)+' · ID '+d.id+'</div></div></div></td>';
+    h+='<td><span class="badge" style="background:'+branchColor+'15;color:'+branchColor+'">'+BRANCH_SHORT[d.branch]+'</span></td>';
+    h+='<td><div style="font-size:12px;font-weight:700;color:#2F2C2C">'+esc(d.licenseType)+'</div><div style="font-size:10px;color:'+(d.license.status==='warn'?'#b45309':'#9ca3af')+';font-weight:500">~'+esc(d.licenseExpiry)+'</div></td>';
+    h+='<td>'+statusBadge+'<div style="font-size:11px;color:#9ca3af;margin-top:2px;font-weight:500">'+esc(d.role)+'</div></td>';
+    h+='<td><div class="bar" style="margin:0 0 3px"><div class="bar-fill '+kaizenCls+'" style="width:'+Math.min(kaizenPct,100)+'%"></div></div><div style="font-size:10px;color:#6b7280;font-weight:600">'+d.kaizen.month+'h / '+d.kaizen.limit+'h ('+kaizenPct+'%)</div></td>';
+    h+='<td style="font-size:12px;font-weight:600;color:#2F2C2C">'+d.violation.safeDays.toLocaleString()+'日</td>';
+    h+='<td style="text-align:center">'+(alertCount>0?'<span class="badge badge-warning">'+alertCount+'</span>':'<span class="badge badge-success">✓</span>')+'</td>';
+    h+='</tr>';
+  }
+  h+='</tbody></table>';
+  if(list.length===0)h+='<div style="padding:40px;text-align:center;color:#9ca3af;font-weight:500">該当するドライバーがいません</div>';
+  return h;
+}
+
+function renderDriverDetail(){
+  var d=null;
+  for(var i=0;i<DRIVERS.length;i++)if(DRIVERS[i].id===state.selectedDriverId)d=DRIVERS[i];
+  if(!d)return '<div>ドライバーが見つかりません</div>';
+
+  var alerts=[];
+  if(d.license.status==='warn')   alerts.push('免許有効期限まで残り'+d.license.daysLeft+'日 ('+d.licenseExpiry+')');
+  if(d.license.status==='danger') alerts.push('免許期限切迫');
+  if(d.aptitude.status==='warn')  alerts.push('適性診断 次回期限 '+d.aptitude.next);
+  if(d.health.stress==='pending') alerts.push('ストレスチェック未実施');
+  if(d.education.done<d.education.total) alerts.push('特別教育 '+(d.education.total-d.education.done)+'項目未完了');
+  if(d.kaizen.restViolation>0)    alerts.push('今月 休息時間違反 '+d.kaizen.restViolation+'回');
+  if(d.kaizen.continuousViolation>0) alerts.push('今月 連続運転違反 '+d.kaizen.continuousViolation+'回');
+
+  var kaizenPct=Math.round((d.kaizen.month/d.kaizen.limit)*100);
+  var kaizenCls=kaizenPct>95?'danger':kaizenPct>85?'warn':'ok';
+  var eduPct=Math.round((d.education.done/d.education.total)*100);
+
+  var h='';
+  h+='<div class="page-header">';
+  h+='<div class="ph-left"><div class="ph-breadcrumb"><a onclick="backToList()">運転者台帳</a> › '+esc(d.name)+'</div>';
+  h+='<h1>'+esc(d.name)+'</h1><div class="ph-sub">'+esc(d.kana)+' · ID '+d.id+' · '+BRANCH_LABELS[d.branch]+'</div></div>';
+  h+='<div class="ph-right">';
+  h+='<button class="btn" onclick="backToList()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>一覧へ</button>';
+  h+='<button class="btn"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>印刷</button>';
+  h+='<button class="btn btn-primary"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>編集</button>';
+  h+='</div></div>';
+
+  h+='<div class="hero-card">';
+  h+='<div class="avatar avatar-lg">'+esc(getInitial(d.name))+'</div>';
+  h+='<div class="hero-info">';
+  h+='<div class="hero-name">'+esc(d.name)+'<span class="kana">'+esc(d.kana)+'</span><span class="id">乗務員ID '+d.id+'</span></div>';
+  h+='<div class="hero-meta">'+esc(d.dept)+' · '+BRANCH_LABELS[d.branch]+' · '+esc(d.role)+'</div>';
+  h+='<div class="hero-badges">';
+  h+=(d.status==='就業中'?'<span class="badge badge-success">就業中</span>':'<span class="badge badge-gray">休職中</span>');
+  h+='<span class="badge badge-teal">勤続'+getYearsOfService(d.hireDate)+'年</span>';
+  h+='<span class="badge badge-teal">'+getAge(d.birthDate)+'歳</span>';
+  h+='<span class="badge badge-info">'+esc(d.licenseType)+'免許</span>';
+  for(var q=0;q<d.qualifications.length;q++) h+='<span class="badge badge-gray">'+esc(d.qualifications[q])+'</span>';
+  h+='<span class="badge badge-success">無事故 '+d.violation.safeDays.toLocaleString()+'日</span>';
+  h+='</div></div></div>';
+
+  if(alerts.length>0){
+    h+='<div class="alert-strip">';
+    h+='<div class="icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>';
+    h+='<div style="flex:1"><div class="title">要対応 '+alerts.length+'件</div><div class="items">'+alerts.join(' ・ ')+'</div></div></div>';
+  }
+
+  h+='<div class="status-grid">';
+
+  h+='<div class="status-card">';
+  h+='<div class="status-card-label"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2M15 12h2M7 16h10"/></svg>免許・資格</div>';
+  h+='<div class="status-card-main">'+esc(d.licenseType)+(d.qualifications.length>0?' · '+esc(d.qualifications[0]):'')+'</div>';
+  h+='<div class="status-card-row"><span>免許番号</span><span class="val">'+esc(d.licenseNo)+'</span></div>';
+  h+='<div class="status-card-row"><span>有効期限</span><span class="val '+(d.license.status==='warn'?'text-warning':'')+'">'+esc(d.licenseExpiry)+'</span></div>';
+  h+='<div class="status-card-row"><span>残り</span><span class="val '+(d.license.status==='warn'?'text-warning':'text-teal')+'">'+d.license.daysLeft+'日</span></div>';
+  if(d.licenseCond) h+='<div class="status-card-row"><span>条件</span><span class="val">'+esc(d.licenseCond)+'</span></div>';
+  h+='</div>';
+
+  h+='<div class="status-card">';
+  h+='<div class="status-card-label"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="3" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21"/><line x1="3" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21" y2="12"/></svg>適性診断</div>';
+  h+='<div class="status-card-main">'+esc(d.aptitude.last)+' <span style="font-size:12px;color:#6b7280;font-weight:500">'+esc(d.aptitude.grade)+'判定</span></div>';
+  h+='<div class="status-card-row"><span>次回期限</span><span class="val '+(d.aptitude.status==='warn'?'text-warning':'')+'">'+esc(d.aptitude.next)+'</span></div>';
+  h+='<div class="status-card-row"><span>診断種別</span><span class="val">一般診断</span></div>';
+  h+='</div>';
+
+  h+='<div class="status-card">';
+  h+='<div class="status-card-label"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>事故・違反 (直近3年)</div>';
+  h+='<div style="display:flex;gap:24px;margin-bottom:8px">';
+  h+='<div><div style="font-size:11px;color:#6b7280;font-weight:600">事故</div><div style="font-size:24px;font-weight:800" class="'+(d.violation.accident3y===0?'text-success':'text-danger')+'">'+d.violation.accident3y+'</div></div>';
+  h+='<div><div style="font-size:11px;color:#6b7280;font-weight:600">違反</div><div style="font-size:24px;font-weight:800" class="'+(d.violation.count3y===0?'text-success':'')+'">'+d.violation.count3y+'</div></div>';
+  h+='<div><div style="font-size:11px;color:#6b7280;font-weight:600">無事故</div><div style="font-size:24px;font-weight:800" class="text-success">'+d.violation.safeDays+'<span style="font-size:11px;font-weight:600">日</span></div></div>';
+  h+='</div>';
+  h+=d.violation.lastDate?'<div style="font-size:11px;color:#6b7280;font-weight:500">直近: '+esc(d.violation.lastDate)+' '+esc(d.violation.lastType)+'</div>':'<div style="font-size:11px;color:#059669;font-weight:600">違反履歴なし</div>';
+  h+='</div>';
+
+  h+='<div class="status-card">';
+  h+='<div class="status-card-label"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>特別教育 (年12項目)</div>';
+  h+='<div class="status-card-main">'+d.education.done+' / '+d.education.total+' <span style="font-size:12px;color:#6b7280;font-weight:500">完了</span></div>';
+  h+='<div class="bar"><div class="bar-fill teal" style="width:'+eduPct+'%"></div></div>';
+  h+='<div style="font-size:11px;color:#6b7280;font-weight:500">'+(d.education.missing.length>0?'未実施: '+d.education.missing.join(' · '):'全項目完了 ✓')+'</div>';
+  h+='</div>';
+
+  h+='<div class="status-card">';
+  h+='<div class="status-card-label"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>健康管理</div>';
+  h+='<div class="status-card-row"><span>健康診断</span><span class="val '+(d.health.checkup==='pending'?'text-warning':'text-success')+'">'+(d.health.checkup==='pending'?'未受診':esc(d.health.checkup))+'</span></div>';
+  h+='<div class="status-card-row"><span>ストレスC</span><span class="val '+(d.health.stress==='pending'?'text-warning':'text-success')+'">'+(d.health.stress==='pending'?'未実施':esc(d.health.stress))+'</span></div>';
+  h+='<div class="status-card-row"><span>SAS検査</span><span class="val">'+(d.health.sas==='na'?'該当なし':d.health.sas==='pending'?'未受診':esc(d.health.sas))+'</span></div>';
+  h+='</div>';
+
+  h+='<div class="status-card">';
+  h+='<div class="status-card-label"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>改善基準告示 (今月実績)</div>';
+  h+='<div class="status-card-main '+(kaizenCls==='danger'?'text-danger':kaizenCls==='warn'?'text-warning':'')+'">'+d.kaizen.month+'h / '+d.kaizen.limit+'h</div>';
+  h+='<div class="bar"><div class="bar-fill '+kaizenCls+'" style="width:'+Math.min(kaizenPct,100)+'%"></div></div>';
+  h+='<div style="font-size:11px;color:#6b7280;font-weight:500">休息違反 '+d.kaizen.restViolation+' · 連続運転違反 '+d.kaizen.continuousViolation+'</div>';
+  h+='</div>';
+
+  h+='</div>';
+
+  h+='<div class="detail-section">';
+  h+='<div class="detail-section-header"><div class="detail-section-title"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>基本情報</div>';
+  h+='<button class="btn btn-sm btn-ghost"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>編集</button></div>';
+  h+='<div class="info-grid">';
+  h+='<div class="info-row"><span class="label">乗務員ID</span><span class="val">'+d.id+'</span></div>';
+  h+='<div class="info-row"><span class="label">従業員カナ</span><span class="val">'+esc(d.kana)+'</span></div>';
+  h+='<div class="info-row"><span class="label">生年月日</span><span class="val">'+esc(d.birthDate)+' ('+getAge(d.birthDate)+'歳)</span></div>';
+  h+='<div class="info-row"><span class="label">性別 / 血液型</span><span class="val">'+esc(d.gender)+' / '+esc(d.blood)+'型</span></div>';
+  h+='<div class="info-row"><span class="label">選任年月日</span><span class="val">'+esc(d.appointDate)+'</span></div>';
+  h+='<div class="info-row"><span class="label">入社日</span><span class="val">'+esc(d.hireDate)+' (勤続'+getYearsOfService(d.hireDate)+'年)</span></div>';
+  h+='<div class="info-row full"><span class="label">住所</span><span class="val">'+esc(d.address)+'</span></div>';
+  h+='<div class="info-row"><span class="label">電話番号</span><span class="val">'+esc(d.phone)+'</span></div>';
+  h+='<div class="info-row"><span class="label">歩合率</span><span class="val">'+d.rate.toFixed(2)+'%</span></div>';
+  h+='</div></div>';
+
+  h+='<div class="detail-section">';
+  h+='<div class="detail-section-header"><div class="detail-section-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>保有資格</div>';
+  h+='<button class="btn btn-sm btn-ghost"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>追加</button></div>';
+  if(d.qualifications.length>0){
+    h+='<div style="display:flex;gap:8px;flex-wrap:wrap">';
+    for(var k=0;k<d.qualifications.length;k++) h+='<span class="badge badge-teal" style="padding:6px 14px;font-size:12px">'+esc(d.qualifications[k])+'</span>';
+    h+='</div>';
+  }else{
+    h+='<div style="font-size:12px;color:#9ca3af;font-weight:500">登録された資格はありません</div>';
+  }
+  h+='</div>';
+
+  return h;
+}
+
+/* ========== ダッシュボード ========== */
+function renderDashboard(){
+  var list=filteredDrivers().filter(function(d){return d.status==='就業中';});
+  var alertDrivers  = list.filter(hasAlert);
+  var licenseWarn   = list.filter(function(d){return d.license.status!=='ok';}).length;
+  var stressPending = list.filter(function(d){return d.health.stress==='pending';}).length;
+  var kaizenRisk    = list.filter(function(d){return (d.kaizen.month/d.kaizen.limit)>0.9;}).length;
+  var eduIncomplete = list.filter(function(d){return d.education.done<d.education.total;}).length;
+  var restCount     = DRIVERS.filter(function(d){return (currentBranch==='all'||d.branch===currentBranch)&&d.status==='休職中';}).length;
+
+  var h='';
+  h+='<div class="page-header">';
+  h+='<div class="ph-left"><h1><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#03968F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>ダッシュボード<span class="badge badge-teal" style="font-size:11px">'+getBranchLabel(currentBranch)+'</span></h1>';
+  h+='<div class="ph-sub">労務状況の全体サマリー</div></div></div>';
+
+  h+='<div class="metric-grid">';
+  h+='<div class="metric-card"><div class="metric-label">在籍者数</div><div class="metric-value">'+list.length+'<span class="unit">名</span></div><div class="metric-sub">就業中 (休職 '+restCount+'名)</div></div>';
+  h+='<div class="metric-card"><div class="metric-label">要対応アラート</div><div class="metric-value '+(alertDrivers.length>0?'text-warning':'')+'">'+alertDrivers.length+'<span class="unit">件</span></div><div class="metric-sub">下記で確認</div></div>';
+  h+='<div class="metric-card"><div class="metric-label">免許期限 30日以内</div><div class="metric-value '+(licenseWarn>0?'text-warning':'')+'">'+licenseWarn+'<span class="unit">名</span></div><div class="metric-sub">要更新手続き</div></div>';
+  h+='<div class="metric-card"><div class="metric-label">拘束時間 90%超</div><div class="metric-value '+(kaizenRisk>0?'text-danger':'')+'">'+kaizenRisk+'<span class="unit">名</span></div><div class="metric-sub">改善基準リスク</div></div>';
+  h+='<div class="metric-card"><div class="metric-label">ストレスチェック未</div><div class="metric-value">'+stressPending+'<span class="unit">名</span></div><div class="metric-sub">年1回の義務</div></div>';
+  h+='<div class="metric-card"><div class="metric-label">特別教育 未完了</div><div class="metric-value">'+eduIncomplete+'<span class="unit">名</span></div><div class="metric-sub">年12項目</div></div>';
+  h+='</div>';
+
+  h+='<div class="card" style="margin-bottom:14px">';
+  h+='<div class="card-title"><span>要対応ドライバー ('+alertDrivers.length+'名)</span><a class="link" onclick="switchRView(\'drivers\')">運転者台帳で見る →</a></div>';
+  if(alertDrivers.length===0){
+    h+='<div style="text-align:center;padding:20px 0;color:#6b7280;font-weight:500">問題なし。全員健全です 👍</div>';
+  }else{
+    h+='<table class="driver-table" style="border:none;box-shadow:none">';
+    h+='<thead><tr><th style="width:36%">ドライバー</th><th>アラート内容</th><th style="width:100px">アクション</th></tr></thead><tbody>';
+    for(var i=0;i<Math.min(alertDrivers.length,10);i++){
+      var d=alertDrivers[i];
+      h+='<tr onclick="switchRView(\'drivers\');setTimeout(function(){selectDriver('+d.id+');},50)">';
+      h+='<td><div class="driver-cell"><div class="avatar">'+esc(getInitial(d.name))+'</div><div><div class="driver-name">'+esc(d.name)+'</div><div class="driver-kana">'+BRANCH_SHORT[d.branch]+' · '+esc(d.role)+'</div></div></div></td>';
+      h+='<td>'+alertSummary(d)+'</td>';
+      h+='<td><button class="btn btn-sm">詳細</button></td></tr>';
+    }
+    h+='</tbody></table>';
+  }
+  h+='</div>';
+
+  document.getElementById('dashboard-body').innerHTML=h;
+}
+function alertSummary(d){
+  var items=[];
+  if(d.license.status==='warn')   items.push('<span class="badge badge-warning">免許あと'+d.license.daysLeft+'日</span>');
+  if(d.aptitude.status==='warn')  items.push('<span class="badge badge-warning">適性診断 '+d.aptitude.next+'</span>');
+  if(d.education.done<d.education.total) items.push('<span class="badge badge-gray">教育 '+d.education.done+'/'+d.education.total+'</span>');
+  if(d.health.stress==='pending') items.push('<span class="badge badge-gray">ストレス未</span>');
+  if(d.kaizen.restViolation>0)    items.push('<span class="badge badge-danger">休息違反'+d.kaizen.restViolation+'</span>');
+  if(d.kaizen.continuousViolation>0) items.push('<span class="badge badge-danger">連続運転違反</span>');
+  if((d.kaizen.month/d.kaizen.limit)>0.95) items.push('<span class="badge badge-danger">拘束'+Math.round(d.kaizen.month/d.kaizen.limit*100)+'%</span>');
+  return '<div style="display:flex;gap:4px;flex-wrap:wrap">'+items.join('')+'</div>';
+}
+
+/* ========== プレースホルダー ========== */
+function renderPlaceholder(view){
+  var plans={
+    attendance:['日次勤怠一覧','月次集計・締め処理','スマホ打刻・GPS','残業申請フロー','直行直帰対応'],
+    kaizen:['拘束時間 日/月/年','休息時間 11h チェック','運転時間 2日平均','連続運転 4時間ルール','監査対応帳票'],
+    shift:['月間シフト表','配車計画連携','拠点別シフト','シフト自動作成'],
+    payroll:['歩合給自動計算','各種手当・控除','給与明細PDF','FBデータ作成','賞与計算'],
+    leave:['有給残日数','年5日義務管理','半休・時間単位','有給申請フロー','付与処理'],
+    employees:['事務員・整備士含む全社員管理','雇用形態別一覧','異動履歴','マイナンバー管理'],
+    reports:['労働者名簿','賃金台帳','出勤簿','36協定管理','年次有給休暇管理簿']
+  };
+  var titles={attendance:'勤怠管理',kaizen:'改善基準告示',shift:'シフト作成',payroll:'給与計算',leave:'有給管理',employees:'社員マスタ',reports:'帳票・レポート'};
+  var subs={attendance:'打刻・集計・申請',kaizen:'拘束時間・休息時間・運転時間',shift:'月間シフト・勤務計画',payroll:'月次給与・賞与・明細',leave:'残日数・申請・年5日義務',employees:'全社員の基本情報',reports:'法定帳票・各種レポート'};
+  var iconPaths={
+    attendance:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    kaizen:'<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+    shift:'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+    payroll:'<line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>',
+    leave:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>',
+    employees:'<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>',
+    reports:'<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>'
+  };
+  var title=titles[view]||'準備中';
+  var sub=subs[view]||'';
+  var iconSvg='<svg viewBox="0 0 24 24">'+(iconPaths[view]||'<circle cx="12" cy="12" r="10"/>')+'</svg>';
+  var titleSvg='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#03968F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(iconPaths[view]||'<circle cx="12" cy="12" r="10"/>')+'</svg>';
+  var features=plans[view]||[];
+
+  var h='';
+  h+='<div class="page-header">';
+  h+='<div class="ph-left"><h1>'+titleSvg+title+'<span class="badge badge-teal" style="font-size:11px">'+getBranchLabel(currentBranch)+'</span></h1>';
+  h+='<div class="ph-sub">'+sub+'</div></div></div>';
+
+  h+='<div class="placeholder-card">';
+  h+='<div class="pc-icon">'+iconSvg+'</div>';
+  h+='<div class="pc-title">'+title+'</div>';
+  h+='<div class="pc-desc">この画面は次のフェーズで実装予定です</div>';
+  h+='<div class="pc-phase">Coming Soon</div>';
+  h+='<ul class="placeholder-feature-list">';
+  for(var i=0;i<features.length;i++) h+='<li class="'+(i===0?'ready':'')+'">'+esc(features[i])+'</li>';
+  h+='</ul>';
+  h+='</div>';
+
+  document.getElementById(view+'-body').innerHTML=h;
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  var l=document.getElementById('sb-logo-img');
+  if(l)l.src=DEX_LOGO;
+});
+</script>
+</body>
+</html>

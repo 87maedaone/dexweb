@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配送依頼 - DAIEI EXPRESS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-auth-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-database-compat.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#03968F;--primary-dark:#027a74;--bg:#F1F6EF;--card:#fff;--border:#e5e7eb;--text:#2F2C2C;--sub:#6b7280;--error:#dc2626;--success:#059669;--warn:#f59e0b}
+body{font-family:'Zen Kaku Gothic New',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.header{background:var(--primary);padding:16px 0;position:sticky;top:0;z-index:10}
+.header-inner{max-width:760px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:14px}
+.header-brand{font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:2px}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.9);font-size:14px}
+.header-right button{background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700}
+.main{max-width:760px;margin:0 auto;padding:28px 24px 80px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px}
+.field .req{color:var(--error);font-size:12px;margin-left:4px}
+.field input,.field select,.field textarea{width:100%;font-size:16px;padding:12px 14px;border:2px solid var(--border);border-radius:10px;font-family:inherit;background:var(--card)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--primary)}
+.field input.error,.field select.error{border-color:var(--error);background:#fef2f2}
+.field textarea{min-height:80px;resize:vertical}
+.field .hint{font-size:12px;color:var(--sub);margin-top:3px}
+.field-row{display:flex;gap:12px}
+.field-row .field{flex:1}
+.btn{font-family:inherit;font-size:16px;font-weight:700;padding:13px 28px;border-radius:12px;border:2px solid;cursor:pointer}
+.btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-outline{background:#fff;border-color:var(--border);color:var(--sub)}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+.btn-full{width:100%}
+.btn-area{display:flex;gap:12px;margin-top:24px}
+.center-wrap{display:flex;align-items:center;justify-content:center;min-height:80vh}
+.card{background:var(--card);border-radius:20px;padding:48px 40px;width:100%;max-width:440px;box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.card-title{font-size:24px;font-weight:900;margin-bottom:8px;text-align:center}
+.card-sub{font-size:14px;color:var(--sub);text-align:center;margin-bottom:28px;line-height:1.6}
+.card-link{text-align:center;margin-top:16px;font-size:14px;color:var(--sub)}
+.card-link a{color:var(--primary);font-weight:700;cursor:pointer;text-decoration:none}
+.card-error{color:var(--error);font-size:13px;text-align:center;margin-top:12px;display:none}
+.stepper{display:flex;align-items:center;margin-bottom:32px;gap:4px}
+.step{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--sub)}
+.step.active{color:var(--primary);font-weight:700}
+.step.done{color:var(--success)}
+.step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;border:2px solid var(--border);color:var(--sub);font-family:'Poppins',sans-serif}
+.step.active .step-num{border-color:var(--primary);background:var(--primary);color:#fff}
+.step.done .step-num{border-color:var(--success);background:var(--success);color:#fff}
+.step-line{flex:1;height:2px;background:var(--border);min-width:12px}
+.step-line.done{background:var(--success)}
+.sec-box{border:2px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px;background:var(--card)}
+.sec-box.green{border-color:#a7f3d0;background:#f0fdf4}
+.sec-box.blue{border-color:#93c5fd;background:#eff6ff}
+.sec-title{font-size:16px;font-weight:700;margin-bottom:14px}
+.sec-title.green{color:#065f46}
+.sec-title.blue{color:#1d4ed8}
+.sec-title.primary{color:var(--primary)}
+.radio-group{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.radio-opt{padding:10px 18px;border:2px solid var(--border);border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;transition:all .15s}
+.radio-opt:hover{border-color:var(--primary)}
+.radio-opt.selected{border-color:var(--primary);background:var(--primary);color:#fff}
+.checkbox-group{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.cb-opt{padding:10px 18px;border:2px solid var(--border);border-radius:10px;cursor:pointer;font-size:14px;font-weight:600}
+.cb-opt.selected{border-color:var(--primary);background:#f0fdf4;color:var(--primary)}
+.confirm-table{width:100%;font-size:14px;border-collapse:collapse}
+.confirm-table th{text-align:left;padding:8px 12px;background:#f9fafb;color:var(--sub);font-weight:700;width:140px;border-bottom:1px solid var(--border)}
+.confirm-table td{padding:8px 12px;border-bottom:1px solid var(--border)}
+.dash-title{font-size:24px;font-weight:900;margin-bottom:4px}
+.dash-sub{font-size:14px;color:var(--sub);margin-bottom:24px}
+.dash-tabs{display:flex;gap:8px;margin-bottom:24px}
+.dash-tab{padding:8px 20px;border-radius:10px;border:2px solid var(--border);background:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--text)}
+.dash-tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px}
+.info-title{font-size:15px;font-weight:700;color:var(--primary);margin-bottom:12px}
+.info-grid{display:grid;grid-template-columns:100px 1fr;gap:6px;font-size:14px}
+.info-grid dt{color:var(--sub);font-weight:700}
+.info-grid dd{color:var(--text)}
+.section-title{font-size:17px;font-weight:700;color:var(--primary);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--primary);display:inline-block}
+.order-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.oc-date{font-family:'Poppins',sans-serif;font-size:13px;color:var(--sub);width:80px}
+.oc-dest{font-weight:700;font-size:14px;flex:1;min-width:100px}
+.oc-addr{font-size:13px;color:var(--sub);flex:1;min-width:100px}
+.oc-wt{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;width:60px}
+.oc-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px}
+.st-pending{background:#fef3c7;color:#92400e}
+.st-confirmed{background:#d1fae5;color:#065f46}
+.st-done{background:#e0e7ff;color:#3730a3}
+.empty-msg{padding:40px;text-align:center;color:var(--sub)}
+.success-card{display:none;background:var(--card);border:2px solid var(--success);border-radius:16px;padding:40px;text-align:center}
+.status-card{background:var(--card);border-radius:16px;padding:40px;text-align:center;max-width:480px}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:12px 28px;border-radius:30px;font-size:15px;font-weight:700;opacity:0;transition:opacity .3s;z-index:999;pointer-events:none}
+.toast.show{opacity:1}
+@media(max-width:600px){.field-row{flex-direction:column;gap:0}.card{padding:32px 24px}.stepper{flex-wrap:wrap}.radio-group,.checkbox-group{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="header"><div class="header-inner"><div class="header-brand">DAIEI EXPRESS</div><div class="header-right" id="hdr" style="display:none"><span id="hdr-name"></span><button onclick="doLogout()">ログアウト</button></div></div></div>
+<div class="main" id="app"></div>
+<div class="toast" id="toast"></div>
+<script>
+const CFG={apiKey:"AIzaSyCA1CtdHAenDWKTco33Oj4K8iY-zi3fJDY",authDomain:"daieiexpress-1942.firebaseapp.com",databaseURL:"https://daieiexpress-1942-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"daieiexpress-1942",storageBucket:"daieiexpress-1942.firebasestorage.app",messagingSenderId:"676880556822",appId:"1:676880556822:web:feb1be9eff2238f102e637"};
+firebase.initializeApp(CFG);
+const auth=firebase.auth();
+const db=firebase.database();
+const A=document.getElementById('app');
+let regData={},cust=null,_rv={};
+const todayStr=(function(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')})();
+
+function esc(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):'';}
+var _tt;function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show')},3000);}
+function gv(id){var el=document.getElementById(id);return el?el.value.trim():'';}
+function selRadio(gid,val,el){_rv[gid]=val;el.parentElement.querySelectorAll('.radio-opt').forEach(function(o){o.classList.remove('selected')});el.classList.add('selected');}
+function toggleCb(el){el.classList.toggle('selected');}
+
+// === AUTH STATE ===
+auth.onAuthStateChanged(function(user){
+if(user){
+user.reload().then(function(){
+var u=auth.currentUser;
+db.ref('customers/'+u.uid).once('value',function(snap){
+var d=snap.val();
+if(!d){showLogin();return;}
+if(!u.emailVerified){showVerifyEmail(u);return;}
+if(d.status==='pending'){showPending();return;}
+if(d.status==='rejected'){showRejected();return;}
+if(d.status!=='approved'){showPending();return;}
+cust={uid:u.uid,...d};
+document.getElementById('hdr').style.display='flex';
+document.getElementById('hdr-name').textContent=d.companyName||'';
+showDashboard();
+});
+}).catch(function(){showLogin();});
+}else{showLogin();}
+});
+
+// === LOGIN ===
+function showLogin(){
+document.getElementById('hdr').style.display='none';cust=null;
+A.innerHTML='<div class="center-wrap"><div class="card"><div class="card-title">配送依頼システム</div><div class="card-sub">ログインしてください</div><div class="field"><label>メールアドレス</label><input id="l-email" type="email" onkeydown="if(event.key===\'Enter\')doLogin()"></div><div class="field"><label>パスワード</label><input id="l-pass" type="password" onkeydown="if(event.key===\'Enter\')doLogin()"></div><button class="btn btn-primary btn-full" onclick="doLogin()">ログイン</button><div class="card-error" id="l-err"></div><div class="card-link"><a onclick="showForgotPw()">パスワードを忘れた方</a></div><div class="card-link" style="margin-top:12px"><a onclick="regStep1()">新規会員登録はこちら</a></div></div></div>';
+}
+
+function doLogin(){
+var em=gv('l-email'),pw=gv('l-pass');
+if(!em||!pw){showToast('入力してください');return;}
+var errEl=document.getElementById('l-err');errEl.style.display='none';
+auth.signInWithEmailAndPassword(em,pw).then(function(){
+// onAuthStateChanged will handle the rest
+}).catch(function(err){
+var msg='ログインに失敗しました';
+if(err.code==='auth/user-not-found'||err.code==='auth/wrong-password'||err.code==='auth/invalid-credential')msg='メールアドレスまたはパスワードが違います';
+if(err.code==='auth/too-many-requests')msg='ログイン試行回数が多すぎます。しばらくお待ちください';
+errEl.textContent=msg;errEl.style.display='block';
+});
+}
+
+function doLogout(){auth.signOut();}
+
+// === EMAIL VERIFICATION ===
+function showVerifyEmail(user){
+A.innerHTML='<div class="center-wrap"><div class="status-card" style="border:2px solid var(--warn)"><div style="font-size:48px;margin-bottom:12px">&#9993;</div><div style="font-size:22px;font-weight:900;margin-bottom:8px">メール認証が必要です</div><div style="font-size:14px;color:var(--sub);line-height:1.7;margin-bottom:20px">ご登録のメールアドレスに認証メールを送信しています。<br>メール内のリンクをクリックして認証を完了してください。<br><br><strong>'+esc(user.email)+'</strong></div><button class="btn btn-primary" style="margin-right:8px" onclick="resendVerify()">認証メールを再送信</button><button class="btn btn-outline" onclick="auth.currentUser.reload().then(function(){auth.onAuthStateChanged(function(){});;location.reload()})">認証済みの方はこちら</button><div class="card-link" style="margin-top:16px"><a onclick="doLogout()">ログイン画面に戻る</a></div></div></div>';
+}
+
+function resendVerify(){
+auth.currentUser.sendEmailVerification().then(function(){showToast('認証メールを再送信しました');}).catch(function(err){showToast('送信エラー: '+err.message);});
+}
+
+// === FORGOT PASSWORD ===
+function showForgotPw(){
+A.innerHTML='<div class="center-wrap"><div class="card"><div class="card-title">パスワード再設定</div><div class="card-sub">ご登録のメールアドレスを入力してください。<br>パスワードリセット用のメールを送信します。</div><div class="field"><label>メールアドレス</label><input id="fp-email" type="email"></div><button class="btn btn-primary btn-full" onclick="sendResetPw()">リセットメールを送信</button><div class="card-error" id="fp-err"></div><div class="card-link"><a onclick="showLogin()">ログイン画面に戻る</a></div></div></div>';
+}
+
+function sendResetPw(){
+var em=gv('fp-email');if(!em){showToast('メールアドレスを入力');return;}
+auth.sendPasswordResetEmail(em).then(function(){
+A.innerHTML='<div class="center-wrap"><div class="status-card" style="border:2px solid var(--success)"><div style="font-size:48px;margin-bottom:12px">&#9993;</div><div style="font-size:22px;font-weight:900;margin-bottom:8px">送信完了</div><div style="font-size:14px;color:var(--sub);line-height:1.7;margin-bottom:20px">パスワードリセット用のメールを送信しました。<br>メール内のリンクからパスワードを再設定してください。</div><button class="btn btn-primary" onclick="showLogin()">ログイン画面へ</button></div></div>';
+}).catch(function(err){
+var errEl=document.getElementById('fp-err');
+errEl.textContent=err.code==='auth/user-not-found'?'このメールアドレスは登録されていません':'送信エラー: '+err.message;
+errEl.style.display='block';
+});
+}
+
+// === PENDING / REJECTED ===
+function showPending(){
+document.getElementById('hdr').style.display='none';
+A.innerHTML='<div class="center-wrap"><div class="status-card" style="border:2px solid var(--warn)"><div style="font-size:48px;margin-bottom:12px">&#9203;</div><div style="font-size:22px;font-weight:900;margin-bottom:8px">承認までしばらくお待ちください</div><div style="font-size:14px;color:var(--sub);line-height:1.7;margin-bottom:20px">現在、登録申請を確認中です。<br>承認されましたらメールでお知らせいたします。<br>お急ぎの場合はお電話にてご連絡ください。</div><button class="btn btn-outline" onclick="doLogout()">ログイン画面に戻る</button></div></div>';
+}
+
+function showRejected(){
+document.getElementById('hdr').style.display='none';
+A.innerHTML='<div class="center-wrap"><div class="status-card" style="border:2px solid var(--error)"><div style="font-size:48px;margin-bottom:12px">&#10005;</div><div style="font-size:22px;font-weight:900;margin-bottom:8px">申請が承認されませんでした</div><div style="font-size:14px;color:var(--sub);line-height:1.7;margin-bottom:20px">詳細につきましてはお電話にてお問い合わせください。</div><button class="btn btn-outline" onclick="doLogout()">ログイン画面に戻る</button></div></div>';
+}
+
+// === REGISTER STEP 1 ===
+function regStep1(){
+regData={};document.getElementById('hdr').style.display='none';
+A.innerHTML=stepper(1)+'<div class="card-title" style="text-align:left;margin-bottom:24px">会社情報</div><div class="sec-box"><div class="field"><label>会社名<span class="req">*</span></label><input id="r-co"></div><div class="field-row"><div class="field"><label>担当者名<span class="req">*</span></label><input id="r-person"></div><div class="field"><label>部署名</label><input id="r-dept"></div></div><div class="field"><label>会社住所<span class="req">*</span></label><input id="r-addr"></div><div class="field-row"><div class="field"><label>電話番号<span class="req">*</span></label><input id="r-tel" type="tel"></div><div class="field"><label>FAX</label><input id="r-fax"></div></div></div><div class="sec-box" style="border-color:var(--primary)"><div class="sec-title primary">ログイン情報</div><div class="field"><label>メールアドレス<span class="req">*</span></label><input id="r-email" type="email"><div class="hint">ログイン・メール認証・パスワード再設定に使用します</div></div><div class="field"><label>パスワード<span class="req">*</span></label><input id="r-pw1" type="password"><div class="hint">6文字以上</div></div><div class="field"><label>パスワード（確認）<span class="req">*</span></label><input id="r-pw2" type="password"></div></div><div class="btn-area"><button class="btn btn-outline" onclick="showLogin()">戻る</button><button class="btn btn-primary" onclick="valStep1()">次へ</button></div>';
+}
+
+function valStep1(){
+var ids=['r-co','r-person','r-addr','r-tel','r-email','r-pw1','r-pw2'],ok=true;
+ids.forEach(function(id){var el=document.getElementById(id);if(!el.value.trim()){el.classList.add('error');ok=false;}else el.classList.remove('error');});
+if(!ok){showToast('必須項目を入力');return;}
+if(gv('r-pw1').length<6){showToast('パスワードは6文字以上');return;}
+if(gv('r-pw1')!==gv('r-pw2')){showToast('パスワードが一致しません');return;}
+regData.companyName=gv('r-co');regData.person=gv('r-person');regData.dept=gv('r-dept');
+regData.companyAddress=gv('r-addr');regData.tel=gv('r-tel');regData.fax=gv('r-fax');
+regData.email=gv('r-email');regData._pw=gv('r-pw1');
+regStep2();
+}
+
+// === REGISTER STEP 2 ===
+function regStep2(){
+A.innerHTML=stepper(2)+'<div class="card-title" style="text-align:left;margin-bottom:24px">出荷主・集荷先</div><div class="sec-box green"><div class="sec-title green">出荷主登録</div><div style="font-size:13px;color:var(--sub);margin-bottom:12px">送り状に記載する荷送人について</div><div class="radio-group" id="rg-ship"><div class="radio-opt selected" onclick="selRadio(\'rg-ship\',\'same\',this);toggleEl(\'ship-f\',false)">登録会社情報と同じ</div><div class="radio-opt" onclick="selRadio(\'rg-ship\',\'other\',this);toggleEl(\'ship-f\',true)">別の出荷主で発送する</div></div><div id="ship-f" style="display:none"><div class="field"><label>出荷主名<span class="req">*</span></label><input id="r-sn"></div><div class="field"><label>住所<span class="req">*</span></label><input id="r-sa"></div><div class="field-row"><div class="field"><label>電話番号</label><input id="r-st"></div><div class="field"><label>担当者名</label><input id="r-sp"></div></div></div></div><div class="sec-box blue"><div class="sec-title blue">集荷先登録</div><div style="font-size:13px;color:var(--sub);margin-bottom:12px">集荷にお伺いする場所の登録</div><div class="radio-group" id="rg-pick"><div class="radio-opt selected" onclick="selRadio(\'rg-pick\',\'company\',this);toggleEl(\'pick-f\',false)">登録会社情報と同じ</div><div class="radio-opt" onclick="selRadio(\'rg-pick\',\'shipper\',this);toggleEl(\'pick-f\',false)">出荷主情報と同じ</div><div class="radio-opt" onclick="selRadio(\'rg-pick\',\'other\',this);toggleEl(\'pick-f\',true)">別の集荷先を登録する</div><div class="radio-opt" onclick="selRadio(\'rg-pick\',\'none\',this);toggleEl(\'pick-f\',false)">登録しない（固定でない場合）</div></div><div id="pick-f" style="display:none"><div class="field"><label>集荷先名<span class="req">*</span></label><input id="r-pn"></div><div class="field"><label>住所<span class="req">*</span></label><input id="r-pa"></div><div class="field-row"><div class="field"><label>電話番号</label><input id="r-pt"></div><div class="field"><label>担当者名</label><input id="r-pp"></div></div></div></div><div class="btn-area"><button class="btn btn-outline" onclick="regStep1()">戻る</button><button class="btn btn-primary" onclick="valStep2()">次へ</button></div>';
+_rv['rg-ship']='same';_rv['rg-pick']='company';
+}
+function toggleEl(id,show){document.getElementById(id).style.display=show?'block':'none';}
+
+function valStep2(){
+regData.shipperType=_rv['rg-ship']||'same';
+if(regData.shipperType==='other'){if(!gv('r-sn')||!gv('r-sa')){showToast('出荷主情報を入力');return;}regData.shipperName=gv('r-sn');regData.shipperAddress=gv('r-sa');regData.shipperTel=gv('r-st');regData.shipperPerson=gv('r-sp');}
+else{regData.shipperName=regData.companyName;regData.shipperAddress=regData.companyAddress;}
+regData.pickupType=_rv['rg-pick']||'company';
+if(regData.pickupType==='other'){if(!gv('r-pn')||!gv('r-pa')){showToast('集荷先を入力');return;}regData.pickupCompany=gv('r-pn');regData.pickupAddress=gv('r-pa');regData.pickupTel=gv('r-pt');regData.pickupPerson=gv('r-pp');}
+else if(regData.pickupType==='company'){regData.pickupCompany=regData.companyName;regData.pickupAddress=regData.companyAddress;}
+else if(regData.pickupType==='shipper'){regData.pickupCompany=regData.shipperName;regData.pickupAddress=regData.shipperAddress;}
+else{regData.pickupCompany='';regData.pickupAddress='';}
+regStep3();
+}
+
+// === REGISTER STEP 3 ===
+function regStep3(){
+A.innerHTML=stepper(3)+'<div class="card-title" style="text-align:left;margin-bottom:24px">経理・決済・その他</div><div class="sec-box"><div class="sec-title primary">御社締め日</div><div class="radio-group" id="rg-cut"><div class="radio-opt" onclick="selRadio(\'rg-cut\',\'10日\',this)">10日</div><div class="radio-opt" onclick="selRadio(\'rg-cut\',\'15日\',this)">15日</div><div class="radio-opt" onclick="selRadio(\'rg-cut\',\'20日\',this)">20日</div><div class="radio-opt" onclick="selRadio(\'rg-cut\',\'25日\',this)">25日</div><div class="radio-opt selected" onclick="selRadio(\'rg-cut\',\'末日\',this)">末日</div></div><div class="sec-title primary">ご入金日</div><div class="radio-group" id="rg-pay"><div class="radio-opt selected" onclick="selRadio(\'rg-pay\',\'当月\',this)">当月</div><div class="radio-opt" onclick="selRadio(\'rg-pay\',\'翌月\',this)">翌月</div></div></div><div class="sec-box"><div class="sec-title primary">弊社ダイエイ便を最初にお知りになったきっかけ</div><div class="checkbox-group" id="src-sel"><div class="cb-opt" onclick="toggleCb(this)">ダイエイ便ホームページ</div><div class="cb-opt" onclick="toggleCb(this)">メタル便ホームページ</div><div class="cb-opt" onclick="toggleCb(this)">鉄鋼新聞等の媒体</div><div class="cb-opt" onclick="toggleCb(this)">ご紹介</div><div class="cb-opt" onclick="toggleCb(this)">DM</div><div class="cb-opt" onclick="toggleCb(this)">走っているトラックをみた</div></div><div class="field"><label>その他</label><input id="r-src-o" placeholder="上記以外がございましたら"></div><div class="field" style="margin-top:16px"><label>ご質問など</label><textarea id="r-q" placeholder="お気軽にご入力ください"></textarea></div></div><div class="btn-area"><button class="btn btn-outline" onclick="regStep2()">戻る</button><button class="btn btn-primary" onclick="valStep3()">確認画面へ</button></div>';
+_rv['rg-cut']='末日';_rv['rg-pay']='当月';
+}
+
+function valStep3(){
+regData.cutoffDay=_rv['rg-cut']||'末日';regData.paymentMonth=_rv['rg-pay']||'当月';
+var srcs=[];document.querySelectorAll('#src-sel .cb-opt.selected').forEach(function(el){srcs.push(el.textContent)});
+var o=gv('r-src-o');if(o)srcs.push('その他：'+o);
+regData.source=srcs.join('、');regData.questions=gv('r-q');
+regStep4();
+}
+
+// === REGISTER STEP 4: CONFIRM ===
+function regStep4(){
+var pl=regData.pickupType==='none'?'登録しない':regData.pickupType==='company'?'会社と同じ':regData.pickupType==='shipper'?'出荷主と同じ':regData.pickupCompany;
+A.innerHTML=stepper(4)+'<div class="card-title" style="text-align:left;margin-bottom:24px">入力内容の確認</div><div class="sec-box"><div class="sec-title primary">会社情報</div><table class="confirm-table"><tr><th>会社名</th><td>'+esc(regData.companyName)+'</td></tr><tr><th>担当者</th><td>'+esc(regData.person)+(regData.dept?' / '+esc(regData.dept):'')+'</td></tr><tr><th>住所</th><td>'+esc(regData.companyAddress)+'</td></tr><tr><th>電話番号</th><td>'+esc(regData.tel)+'</td></tr>'+(regData.fax?'<tr><th>FAX</th><td>'+esc(regData.fax)+'</td></tr>':'')+'<tr><th>メール</th><td>'+esc(regData.email)+'</td></tr></table></div><div class="sec-box green"><div class="sec-title green">出荷主</div><table class="confirm-table"><tr><th>種別</th><td>'+(regData.shipperType==='same'?'会社と同じ':'別の出荷主')+'</td></tr>'+(regData.shipperType==='other'?'<tr><th>出荷主名</th><td>'+esc(regData.shipperName)+'</td></tr><tr><th>住所</th><td>'+esc(regData.shipperAddress)+'</td></tr>':'')+'</table></div><div class="sec-box blue"><div class="sec-title blue">集荷先</div><table class="confirm-table"><tr><th>種別</th><td>'+esc(pl)+'</td></tr>'+(regData.pickupCompany?'<tr><th>集荷先</th><td>'+esc(regData.pickupCompany)+'</td></tr><tr><th>住所</th><td>'+esc(regData.pickupAddress)+'</td></tr>':'')+'</table></div><div class="sec-box"><div class="sec-title primary">経理</div><table class="confirm-table"><tr><th>締め日</th><td>'+esc(regData.cutoffDay)+'</td></tr><tr><th>入金日</th><td>'+esc(regData.paymentMonth)+'</td></tr></table></div>'+(regData.source?'<div class="sec-box"><table class="confirm-table"><tr><th>きっかけ</th><td>'+esc(regData.source)+'</td></tr></table></div>':'')+(regData.questions?'<div class="sec-box"><table class="confirm-table"><tr><th>ご質問</th><td>'+esc(regData.questions)+'</td></tr></table></div>':'')+'<div class="btn-area"><button class="btn btn-outline" onclick="regStep3()">修正する</button><button class="btn btn-primary" id="reg-btn" onclick="submitReg()">この内容で登録申請</button></div>';
+}
+
+function submitReg(){
+var btn=document.getElementById('reg-btn');btn.disabled=true;btn.textContent='送信中...';
+auth.createUserWithEmailAndPassword(regData.email,regData._pw).then(function(cred){
+var uid=cred.user.uid;
+cred.user.sendEmailVerification();
+var d={companyName:regData.companyName,person:regData.person,dept:regData.dept||'',companyAddress:regData.companyAddress,tel:regData.tel,fax:regData.fax||'',email:regData.email,shipperType:regData.shipperType,shipperName:regData.shipperName||'',shipperAddress:regData.shipperAddress||'',shipperTel:regData.shipperTel||'',shipperPerson:regData.shipperPerson||'',pickupType:regData.pickupType,pickupCompany:regData.pickupCompany||'',pickupAddress:regData.pickupAddress||'',pickupTel:regData.pickupTel||'',pickupPerson:regData.pickupPerson||'',cutoffDay:regData.cutoffDay,paymentMonth:regData.paymentMonth,source:regData.source||'',questions:regData.questions||'',status:'pending',createdAt:Date.now()};
+db.ref('customers/'+uid).set(d).then(function(){
+A.innerHTML='<div class="center-wrap"><div class="status-card" style="border:2px solid var(--warn)"><div style="font-size:48px;margin-bottom:12px">&#9993;</div><div style="font-size:22px;font-weight:900;margin-bottom:8px">登録申請を受け付けました</div><div style="font-size:14px;color:var(--sub);line-height:1.7;margin-bottom:20px"><strong>1. メール認証</strong><br>ご登録のメールアドレスに認証メールを送信しました。<br>リンクをクリックして認証を完了してください。<br><br><strong>2. 社内承認</strong><br>メール認証後、社内にて確認・承認いたします。<br>承認完了後、ログインしてご利用いただけます。</div><button class="btn btn-primary" onclick="showLogin()">ログイン画面へ</button></div></div>';
+});
+}).catch(function(err){
+btn.disabled=false;btn.textContent='この内容で登録申請';
+var msg='登録エラー';
+if(err.code==='auth/email-already-in-use')msg='このメールアドレスは既に登録されています';
+if(err.code==='auth/weak-password')msg='パスワードが弱すぎます';
+showToast(msg);
+});
+}
+
+function stepper(cur){var steps=['会社情報','出荷主・集荷先','経理・その他','確認'];var h='<div class="stepper">';steps.forEach(function(s,i){var n=i+1;h+='<div class="step '+(n<cur?'done':n===cur?'active':'')+'"><div class="step-num">'+(n<cur?'&#10003;':n)+'</div><span>'+s+'</span></div>';if(i<3)h+='<div class="step-line'+(n<cur?' done':'')+'"></div>';});return h+'</div>';}
+
+// === DASHBOARD ===
+function showDashboard(){showDashNew();}
+
+function showDashNew(){
+var c=cust;
+A.innerHTML='<div class="dash-title">'+esc(c.companyName)+'様</div><div class="dash-sub">配送依頼の作成と過去の依頼を確認できます</div><div class="dash-tabs"><button class="dash-tab active" onclick="showDashNew()">新規依頼</button><button class="dash-tab" onclick="showHistory()">依頼履歴</button></div><div class="info-card"><div class="info-title">お客様情報</div><div class="info-grid"><dt>会社名</dt><dd>'+esc(c.companyName)+'</dd><dt>担当者</dt><dd>'+esc(c.person)+'</dd><dt>集荷先</dt><dd>'+esc(c.pickupCompany||'依頼時に入力')+'</dd><dt>集荷住所</dt><dd>'+esc(c.pickupAddress||'依頼時に入力')+'</dd></div></div><div class="section-title">配達情報</div><div class="field"><label>配達先会社名<span class="req">*</span></label><input id="f-dc"></div><div class="field"><label>配達先住所<span class="req">*</span></label><input id="f-da"></div>'+(c.pickupCompany?'':'<div class="field"><label>集荷先<span class="req">*</span></label><input id="f-pc"></div><div class="field"><label>集荷先住所<span class="req">*</span></label><input id="f-pa"></div>')+'<div class="field-row"><div class="field"><label>引取希望日<span class="req">*</span></label><input id="f-pd" type="date" value="'+todayStr+'"></div><div class="field"><label>配達希望日</label><input id="f-dd" type="date"><div class="hint">未定は空欄</div></div></div><div class="field-row"><div class="field"><label>重量</label><input id="f-wt" placeholder="例：1500"></div><div class="field"><label>品名</label><input id="f-sh" placeholder="例：鋼材"></div></div><div class="field"><label>備考</label><textarea id="f-memo" placeholder="車上渡し、ユニック必要、時間指定など"></textarea></div><div class="btn-area"><button class="btn btn-primary" id="btn-sub" onclick="submitOrder()">依頼を送信</button></div><div class="success-card" id="sc"><div style="width:64px;height:64px;background:var(--success);color:#fff;font-size:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">&#10003;</div><div style="font-size:22px;font-weight:900;margin-bottom:8px">依頼を受け付けました</div><div style="font-size:14px;color:var(--sub);margin-bottom:20px">担当者より確認のご連絡をいたします</div><button class="btn btn-primary" onclick="showDashNew()">続けて依頼する</button></div>';
+}
+
+function submitOrder(){
+var c=cust,dc=gv('f-dc'),da=gv('f-da'),pd=gv('f-pd'),ok=true;
+['f-dc','f-da','f-pd'].forEach(function(id){var el=document.getElementById(id);if(!el||!el.value.trim()){if(el)el.classList.add('error');ok=false;}else el.classList.remove('error');});
+if(!c.pickupCompany){['f-pc','f-pa'].forEach(function(id){var el=document.getElementById(id);if(!el||!el.value.trim()){if(el)el.classList.add('error');ok=false;}else el.classList.remove('error');});}
+if(!ok){showToast('必須項目を入力');return;}
+var pref='';['大阪府','兵庫県','京都府','奈良県','和歌山県','滋賀県','三重県','岡山県','広島県','島根県','鳥取県','山口県','香川県','愛媛県','高知県','徳島県'].forEach(function(p){if(da.includes(p))pref=p;});
+var btn=document.getElementById('btn-sub');btn.disabled=true;btn.textContent='送信中...';
+db.ref('orders').push().set({clientName:(c.companyName||'').replace(/株式会社|有限会社/g,'').trim(),pickupDate:pd,deliveryDate:gv('f-dd'),pickupCompany:c.pickupCompany||gv('f-pc'),pickupAddress:c.pickupAddress||gv('f-pa'),deliveryCompany:dc,deliveryPref:pref,deliveryAddress:da,weight:gv('f-wt').replace(/kg|KG/gi,''),shape:gv('f-sh'),barcode:'',driverId:null,memo:gv('f-memo'),isRoute:false,isWebOrder:true,webCustomerId:c.uid,webOrderCompany:c.companyName||'',webOrderStatus:'pending',checked:false,updatedAt:Date.now()}).then(function(){
+btn.disabled=false;btn.textContent='依頼を送信';
+document.getElementById('sc').style.display='block';
+document.querySelectorAll('#app .field,#app .field-row,#app .btn-area,#app .section-title').forEach(function(el){el.style.display='none';});
+});
+}
+
+function showHistory(){
+A.innerHTML='<div class="dash-title">'+esc(cust.companyName)+'様</div><div class="dash-sub">過去の依頼を確認できます</div><div class="dash-tabs"><button class="dash-tab" onclick="showDashNew()">新規依頼</button><button class="dash-tab active">依頼履歴</button></div><div id="hist"><div class="empty-msg">読込中...</div></div>';
+db.ref('orders').orderByChild('webCustomerId').equalTo(cust.uid).once('value',function(snap){
+var list=[];var d=snap.val()||{};Object.entries(d).forEach(function(x){list.push(x[1])});
+list.sort(function(a,b){return(b.updatedAt||0)-(a.updatedAt||0)});
+var el=document.getElementById('hist');
+if(!list.length){el.innerHTML='<div class="empty-msg">依頼履歴はありません</div>';return;}
+var h='';list.forEach(function(o){var st=o.driverId?'done':o.webOrderStatus==='confirmed'?'confirmed':'pending';var t=st==='done'?'配車済':st==='confirmed'?'確認済':'受付中';h+='<div class="order-card"><div class="oc-date">'+(o.pickupDate||'')+'</div><div class="oc-dest">'+esc(o.deliveryCompany||'')+'</div><div class="oc-addr">'+esc(o.deliveryAddress||'')+'</div><div class="oc-wt">'+(o.weight||'')+'</div><div class="oc-status st-'+st+'">'+t+'</div></div>'});
+el.innerHTML=h;
+});
+}
+</script>
+</body>
+</html>
