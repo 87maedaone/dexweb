@@ -529,13 +529,32 @@ function seedDB(){
   };
 }
 
+/* ---------- storage: works in Claude artifact (window.storage) AND
+   anywhere else like GitHub Pages (localStorage fallback) ---------- */
+function hasArtifactStorage(){ try{ return typeof window!=="undefined" && window.storage && typeof window.storage.get==="function"; }catch(e){ return false; } }
+async function storageGet(){
+  if(hasArtifactStorage()){
+    try{ const r=await window.storage.get(STORE_KEY); if(r&&r.value) return r.value; }catch(e){}
+  }
+  try{ const v=localStorage.getItem(STORE_KEY); if(v) return v; }catch(e){}
+  return null;
+}
+async function storageSet(val){
+  let ok=false;
+  if(hasArtifactStorage()){
+    try{ await window.storage.set(STORE_KEY, val); ok=true; }catch(e){}
+  }
+  try{ localStorage.setItem(STORE_KEY, val); ok=true; }catch(e){}
+  return ok;
+}
+
 async function load(){
-  try{ const r=await window.storage.get(STORE_KEY); if(r&&r.value){ DB=JSON.parse(r.value); applyTheme(DB.theme||"inspire"); return; } }
-  catch(e){}
+  const v=await storageGet();
+  if(v){ try{ DB=JSON.parse(v); applyTheme(DB.theme||"inspire"); return; }catch(e){} }
   DB=seedDB(); applyTheme(DB.theme||"inspire"); await save();
 }
 let saveTimer=null;
-async function save(){ try{ await window.storage.set(STORE_KEY, JSON.stringify(DB)); }catch(e){ console.warn(e); } }
+async function save(){ try{ await storageSet(JSON.stringify(DB)); }catch(e){ console.warn(e); } }
 function saveSoon(){ clearTimeout(saveTimer); saveTimer=setTimeout(save,350); }
 
 /* ---------- derived ---------- */
@@ -1081,28 +1100,53 @@ function openProjectModal(editing){
   ST.newStatus=isEdit?editing.status:"making";
   const root=document.getElementById("modalRoot");
   root.innerHTML=`<div class="modal-bg" id="modalBg"><div class="modal">
-    <h3>${isEdit?"案件を編集":"新しい案件"}</h3>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h3 style="margin:0">${isEdit?"案件を編集":"新しい案件"}</h3>
+      <button id="mClose" title="閉じる" style="width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:var(--ink3)">${iconX()}</button>
+    </div>
     <div class="field"><label>案件名</label><input id="mTitle" placeholder="例）KKI製造業サイト" value="${esc(isEdit?editing.title:'')}"></div>
     <div class="field"><label>クライアント名</label><input id="mClient" placeholder="例）株式会社KKI" value="${esc(isEdit?editing.client:'')}"></div>
     <div class="field"><label>ステータス</label><div class="status-opts" id="mStatus">${STATUSES.map(s=>`<button class="status-opt ${s.key===ST.newStatus?'on':''}" data-status="${s.key}">${s.label}</button>`).join("")}</div></div>
     <div class="field"><label>色</label><div class="color-opts" id="mColor">${PROJECT_COLORS.map(c=>`<button class="color-opt ${c===ST.newColor?'on':''}" data-color="${c}" style="background:${c}"></button>`).join("")}</div></div>
-    <div class="modal-actions"><button class="btn-primary" id="mSave">${isEdit?"保存":"作成"}</button><button class="btn-ghost" id="mCancel">キャンセル</button>${isEdit?`<button class="btn-ghost" id="mArchive" style="width:auto;margin-top:0;padding:11px 16px">アーカイブ</button>`:""}</div>
+    <div class="modal-actions"><button class="btn-primary" id="mSave">${isEdit?"完了":"作成"}</button>${isEdit?`<button class="btn-ghost" id="mArchive" style="width:auto;margin-top:0;padding:11px 16px">アーカイブ</button>`:`<button class="btn-ghost" id="mCancel">キャンセル</button>`}</div>
   </div></div>`;
   const bg=document.getElementById("modalBg");
   requestAnimationFrame(()=>bg.classList.add("open"));
-  const close=()=>{ bg.classList.remove("open"); setTimeout(()=>root.innerHTML="",200); };
-  bg.onclick=e=>{ if(e.target===bg)close(); };
-  document.getElementById("mCancel").onclick=close;
-  document.querySelectorAll("#mStatus [data-status]").forEach(b=> b.onclick=()=>{ ST.newStatus=b.dataset.status; document.querySelectorAll("#mStatus .status-opt").forEach(x=>x.classList.toggle("on",x.dataset.status===ST.newStatus)); });
-  document.querySelectorAll("#mColor [data-color]").forEach(b=> b.onclick=()=>{ ST.newColor=b.dataset.color; document.querySelectorAll("#mColor .color-opt").forEach(x=>x.classList.toggle("on",x.dataset.color===ST.newColor)); });
+  const teardown=()=>{ bg.classList.remove("open"); setTimeout(()=>root.innerHTML="",200); };
+
+  // EDIT mode: apply changes live so closing (✖ / 背景 / 完了) always keeps them
+  const applyLive=()=>{
+    if(!isEdit) return;
+    const title=document.getElementById("mTitle").value.trim();
+    editing.title = title || editing.title; // never blank out the name
+    editing.client=document.getElementById("mClient").value.trim();
+    editing.status=ST.newStatus; editing.color=ST.newColor;
+    saveSoon();
+    // reflect immediately in topbar/sidebar/dashboard if visible
+    const h=document.querySelector(".tb-title h1"); if(h)h.textContent=editing.title;
+  };
+  const closeEdit=()=>{ applyLive(); save(); teardown(); render(); refreshSidebarActive(); };
+
+  if(isEdit){
+    document.getElementById("mTitle").addEventListener("input",applyLive);
+    document.getElementById("mClient").addEventListener("input",applyLive);
+  }
+  bg.onclick=e=>{ if(e.target!==bg) return; isEdit?closeEdit():teardown(); };
+  document.getElementById("mClose").onclick=()=>{ isEdit?closeEdit():teardown(); };
+  const mc=document.getElementById("mCancel"); if(mc) mc.onclick=teardown;
+
+  document.querySelectorAll("#mStatus [data-status]").forEach(b=> b.onclick=()=>{ ST.newStatus=b.dataset.status; document.querySelectorAll("#mStatus .status-opt").forEach(x=>x.classList.toggle("on",x.dataset.status===ST.newStatus)); applyLive(); });
+  document.querySelectorAll("#mColor [data-color]").forEach(b=> b.onclick=()=>{ ST.newColor=b.dataset.color; document.querySelectorAll("#mColor .color-opt").forEach(x=>x.classList.toggle("on",x.dataset.color===ST.newColor)); applyLive(); });
+
   document.getElementById("mSave").onclick=()=>{
     const title=document.getElementById("mTitle").value.trim(); if(!title){ toast("案件名を入力してください"); return; }
+    if(isEdit){ closeEdit(); toast("保存しました"); return; }
     const client=document.getElementById("mClient").value.trim();
-    if(isEdit){ editing.title=title; editing.client=client; editing.status=ST.newStatus; editing.color=ST.newColor; }
-    else { const np={id:uid("p"),title,client,status:ST.newStatus,color:ST.newColor,created:todayStr(),archived:false}; DB.projects.push(np); ST.activeProject=np.id; ST.view="project"; ST.tab="hearing"; }
-    save(); close(); render(); refreshSidebarActive(); toast(isEdit?"保存しました":"案件を作成しました");
+    const np={id:uid("p"),title,client,status:ST.newStatus,color:ST.newColor,created:todayStr(),archived:false};
+    DB.projects.push(np); ST.activeProject=np.id; ST.view="project"; ST.tab="hearing";
+    save(); teardown(); render(); refreshSidebarActive(); toast("案件を作成しました");
   };
-  if(isEdit){ document.getElementById("mArchive").onclick=()=>{ if(!confirm(`案件「${editing.title}」をアーカイブしますか？`))return; editing.archived=true; ST.view="dashboard"; ST.activeProject=null; save(); close(); render(); toast("アーカイブしました"); }; }
+  if(isEdit){ document.getElementById("mArchive").onclick=()=>{ if(!confirm(`案件「${editing.title}」をアーカイブしますか？`))return; editing.archived=true; ST.view="dashboard"; ST.activeProject=null; save(); teardown(); render(); toast("アーカイブしました"); }; }
   setTimeout(()=>{ const t=document.getElementById("mTitle"); t&&t.focus(); },60);
 }
 
