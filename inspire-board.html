@@ -268,6 +268,7 @@ a{color:inherit}
 .dpanel-head .dh-acts{display:flex;gap:2px}
 .dpanel-head .dh-acts button{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:var(--ink3);transition:.15s}
 .dpanel-head .dh-acts button:hover{background:var(--bg);color:var(--ink)}
+.dpanel-head .dh-acts #dClose,.dpanel-head .dh-acts #iClose{margin-left:4px;border-left:1px solid var(--line);border-radius:0 8px 8px 0;padding-left:8px;width:34px}
 .dpanel-head .dh-acts button.del:hover{background:#fdecec;color:var(--danger)}
 .dtabs{display:flex;gap:18px;padding:14px 22px 0;border-bottom:1px solid var(--line)}
 .dtab{font-size:13.5px;font-weight:600;color:var(--ink2);padding:6px 0 10px;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:7px;transition:.15s}
@@ -469,7 +470,7 @@ function shotCandidates(primary){
 /* ---------- state ---------- */
 let DB = null;
 let ST = { view:"dashboard", activeProject:null, tab:"sitemap",
-           selNode:null, selInsp:null, inspFilter:null, dtab:"info", zoom:1,
+           selNode:null, selInsp:null, inspFilter:null, inspFrom:null, dtab:"info", zoom:1,
            search:"", newColor:PROJECT_COLORS[0], newStatus:"making" };
 
 /* ---------- seed (matches reference screenshot) ---------- */
@@ -715,7 +716,7 @@ function bindProject(){
   document.getElementById("tbShare").onclick=()=>toast("共有リンクをコピーしました（デモ）");
   document.getElementById("tbLink").onclick=()=>toast("リンクをコピーしました（デモ）");
   document.getElementById("tbMore").onclick=()=>toast("メニュー（デモ）");
-  document.querySelectorAll("[data-tab]").forEach(b=> b.onclick=()=>{ ST.tab=b.dataset.tab; ST.selNode=null; ST.selInsp=null; renderMain(); });
+  document.querySelectorAll("[data-tab]").forEach(b=> b.onclick=()=>{ save(); ST.tab=b.dataset.tab; ST.selNode=null; ST.selInsp=null; ST.inspFrom=null; renderMain(); });
   if(ST.tab==="hearing") bindHearing();
   else if(ST.tab==="inspiration") bindInspiration();
   else bindSitemap();
@@ -877,7 +878,7 @@ function dpanelNodeHTML(){
         <button class="dadd-insp" id="addInspForNode">${iconBookmark()} 参考デザインを追加</button>
       </div>`;
   return `<div class="dpanel-head"><h3>${esc(n.title)}</h3>
-      <div class="dh-acts"><button id="dEdit" title="名前を編集">${iconPencil()}</button><button class="del" id="dDel" title="削除">${iconTrash()}</button></div></div>
+      <div class="dh-acts"><button id="dEdit" title="名前を編集">${iconPencil()}</button><button class="del" id="dDel" title="削除">${iconTrash()}</button><button id="dClose" title="閉じる">${iconX()}</button></div></div>
     <div class="dtabs">
       <button class="dtab ${info?'active':''}" data-dtab="info">情報</button>
       <button class="dtab ${!info?'active':''}" data-dtab="insp">参考デザイン <span class="dc">${linked.length}</span></button>
@@ -889,7 +890,7 @@ function dpanelInspHTML(){
   const p=curProj();
   const opts=`<option value="">ページに紐づけない</option>`+flattenNodes(p.id).map(({node,depth})=>`<option value="${node.id}" ${i.nodeId===node.id?"selected":""}>${"　".repeat(depth)}${esc(node.title)}</option>`).join("");
   return `<div class="dpanel-head"><h3>参考デザイン</h3>
-      <div class="dh-acts"><button id="iBackNode" title="戻る">${iconBack()}</button><button class="del" id="iDel" title="削除">${iconTrash()}</button></div></div>
+      <div class="dh-acts"><button id="iBackNode" title="戻る">${iconBack()}</button><button class="del" id="iDel" title="削除">${iconTrash()}</button><button id="iClose" title="閉じる">${iconX()}</button></div></div>
     <div class="dscroll" style="padding-top:18px">
       <div class="pnl-thumb">${thumbHTML(i)}</div>
       <div class="dblock"><div class="dlabel">タイトル</div><input class="dinput" id="iTitle" value="${esc(i.title)}"></div>
@@ -899,6 +900,7 @@ function dpanelInspHTML(){
       <div class="dblock"><div class="dlabel">保存日</div><div class="dmeta">${esc(i.created)}</div></div>
     </div>`;
 }
+function closeDpanel(){ save(); ST.selNode=null; ST.selInsp=null; renderMain(); }
 function bindDpanel(){
   if(!(ST.selNode||ST.selInsp))return;
   const dp=document.querySelector(".dpanel"); if(!dp)return;
@@ -909,12 +911,14 @@ function bindDpanel(){
     const m=document.getElementById("iMemoE"); m&&m.addEventListener("input",()=>{ i.memo=m.value; saveSoon(); });
     const s=document.getElementById("iNodeE"); s&&s.addEventListener("change",e=>{ i.nodeId=e.target.value||null; save(); renderMain(); });
     document.getElementById("iDel").onclick=()=>{ if(confirm(`「${i.title}」を削除しますか？`)){ DB.inspirations=DB.inspirations.filter(x=>x.id!==i.id); ST.selInsp=null; save(); renderMain(); toast("削除しました"); } };
-    document.getElementById("iBackNode").onclick=()=>{ ST.selInsp=null; if(i.nodeId)ST.selNode=i.nodeId; renderMain(); };
+    document.getElementById("iBackNode").onclick=()=>{ save(); if(ST.inspFrom==="grid"){ ST.inspFrom=null; ST.selInsp=null; ST.tab="inspiration"; renderMain(); return; } ST.selInsp=null; if(i.nodeId)ST.selNode=i.nodeId; renderMain(); };
+    document.getElementById("iClose").onclick=()=>{ save(); if(ST.inspFrom==="grid"){ ST.inspFrom=null; ST.selInsp=null; ST.tab="inspiration"; renderMain(); return; } closeDpanel(); };
     return;
   }
   const n=DB.nodes.find(x=>x.id===ST.selNode); if(!n)return;
   document.querySelectorAll("[data-dtab]").forEach(b=> b.onclick=()=>{ ST.dtab=b.dataset.dtab; renderMain(); });
   document.getElementById("dDel").onclick=()=>delNode(n.id);
+  document.getElementById("dClose").onclick=closeDpanel;
   document.getElementById("dEdit").onclick=()=>{ const inp=document.getElementById("nTitle"); if(inp){ inp.focus(); inp.select(); } };
   const tEl=document.getElementById("nTitle"); tEl&&tEl.addEventListener("input",()=>{ n.title=tEl.value; saveSoon(); const ttl=document.querySelector(`.fbox[data-node="${n.id}"] .fttl`); if(ttl)ttl.textContent=tEl.value; const head=document.querySelector(".dpanel-head h3"); if(head)head.textContent=tEl.value; });
   const mEl=document.getElementById("nMemo"); mEl&&mEl.addEventListener("input",()=>{ n.memo=mEl.value; saveSoon(); });
@@ -929,8 +933,11 @@ function bindNodeTags(n){
   const add=document.getElementById("nTagAdd"); if(!add)return;
   add.onclick=()=>{ add.outerHTML=`<input class="tinput" id="nTagInput" placeholder="タグ名" maxlength="16">`;
     const inp=document.getElementById("nTagInput"); inp.focus();
-    const commit=()=>{ const v=inp.value.trim(); if(v){ n.tags=n.tags||[]; n.tags.push(v); save(); } renderMain(); };
-    inp.onkeydown=e=>{ if(e.key==="Enter")commit(); if(e.key==="Escape")renderMain(); }; inp.onblur=commit;
+    let done=false;
+    const commit=()=>{ if(done)return; done=true; const v=inp.value.trim(); if(v){ n.tags=n.tags||[]; n.tags.push(v); save(); } renderMain(); };
+    const cancel=()=>{ if(done)return; done=true; renderMain(); };
+    inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); commit(); } if(e.key==="Escape"){ e.preventDefault(); cancel(); } };
+    inp.onblur=commit;
   };
 }
 
@@ -974,7 +981,7 @@ function bindInspiration(){
   document.querySelectorAll("[data-bk]").forEach(b=> b.onclick=e=>{ e.stopPropagation(); const i=DB.inspirations.find(x=>x.id===b.dataset.bk); i.bk=!i.bk; saveSoon(); b.classList.toggle("on",i.bk); b.querySelector("svg").setAttribute("fill",i.bk?"currentColor":"none"); });
   wireShots(document.querySelector(".insp-page"));
 }
-function openInspFromGrid(id){ ST.tab="sitemap"; const i=DB.inspirations.find(x=>x.id===id); ST.selInsp=id; ST.selNode=null; renderMain(); }
+function openInspFromGrid(id){ ST.inspFrom="grid"; ST.tab="sitemap"; ST.selInsp=id; ST.selNode=null; renderMain(); }
 function addInspiration(){
   const p=curProj();
   const url=document.getElementById("iUrl").value.trim();
@@ -1116,6 +1123,7 @@ function iconExt(){ return `<svg width="12" height="12" viewBox="0 0 24 24" fill
 function iconExtSm(){ return `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17 17 7M9 7h8v8"/></svg>`; }
 function iconReload(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>`; }
 function iconBack(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>`; }
+function iconX(){ return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg>`; }
 function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),2200); }
 
 /* ---------- boot ---------- */
