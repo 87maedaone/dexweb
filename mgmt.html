@@ -194,9 +194,9 @@ body.theme-shiga .sb-branch-option.selected .sb-branch-check,body.theme-shiga .s
 .top-overlay{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:400;display:none;align-items:center;justify-content:center;opacity:1;transition:opacity .3s ease;backdrop-filter:blur(4px)}
 .top-overlay.open{display:flex}
 .top-overlay.hidden{opacity:0;pointer-events:none}
-.top-overlay-content{background:#f9fafb;border-radius:24px;width:90%;max-width:860px;max-height:85vh;overflow-y:auto;padding:40px;box-shadow:0 24px 64px rgba(0,0,0,.2);animation:topSlideIn .3s ease;position:relative;border:1px solid #e5e7eb}
+.top-overlay-content{background:#fff;border-radius:24px;width:100%;max-width:560px;max-height:85vh;overflow-y:auto;padding:28px 28px 36px;box-shadow:0 24px 64px rgba(0,0,0,.2);animation:topSlideIn .3s ease;position:relative}
 @keyframes topSlideIn{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
-.top-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;position:relative}
+.top-page{display:flex;flex-direction:column;width:100%;position:relative}
 .top-title{font-family:"Noto Sans JP",sans-serif;font-weight:900;font-size:32px;letter-spacing:2px;color:#2F2C2C;margin:8px 0 28px}
 .top-branch{display:flex;gap:12px;margin-bottom:24px;justify-content:center;flex-wrap:wrap}
 .top-branch-btn{font-family:"Noto Sans JP",sans-serif;padding:10px 28px;border-radius:30px;border:2px solid #e5e7eb;background:#fff;font-size:16px;font-weight:600;cursor:pointer;color:#2F2C2C;transition:all .15s}
@@ -542,9 +542,9 @@ window._dexAuthLoadingTimer2=setTimeout(function(){
       <span class="sb-icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8zM5.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM18.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/></svg></span>
       <span>送り状発行</span>
     </div>
-    <div class="sb-item" data-view="invoice" onclick="switchMView('invoice')">
-      <span class="sb-icon"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span>
-      <span>請求書発行</span>
+    <div class="sb-item" data-view="partners" onclick="switchMView('partners')">
+      <span class="sb-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span>
+      <span>協力会社一覧</span>
     </div>
     <div class="sb-item" data-view="staff" onclick="switchMView('staff')">
       <span class="sb-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
@@ -606,6 +606,11 @@ window._dexAuthLoadingTimer2=setTimeout(function(){
       <!-- 請求書発行 -->
       <div id="view-invoice" class="view">
         <div id="invoice-view-body"></div>
+      </div>
+
+      <!-- 協力会社一覧 -->
+      <div id="view-partners" class="view">
+        <div id="partners-view-body"></div>
       </div>
 
       <!-- 社員管理 -->
@@ -805,7 +810,7 @@ function switchMView(v){
   var target=document.getElementById('view-'+v);
   if(target)target.classList.add('active');
   // タイトル更新（topbar削除後のためガード）
-  var titles={dashboard:'ダッシュボード',chat:'チャット',orders:'案件一覧',customers:'お客様管理',slips:'伝票入力',shipping:'送り状発行',invoice:'請求書発行',staff:'社員管理',areamasters:'エリアマスタ',ocr:'OCR設定'};
+  var titles={dashboard:'ダッシュボード',chat:'チャット',orders:'案件一覧',customers:'お客様管理',slips:'伝票入力',shipping:'送り状発行',invoice:'請求書発行',partners:'協力会社一覧',staff:'社員管理',areamasters:'エリアマスタ',ocr:'OCR設定'};
   var tEl=document.getElementById('topbar-title');
   if(tEl)tEl.textContent=titles[v]||'管理画面';
   // URL ハッシュに反映（リロード時の復元用）
@@ -828,7 +833,46 @@ function switchMView(v){
   if(v==='slips')renderSlipsView();
   if(v==='shipping')renderShippingView();
   if(v==='invoice')renderInvoiceView();
+  if(v==='partners')renderPartnersView();
   // 他ビューはPhase 5以降で追加
+}
+
+// ========== 協力会社一覧 ==========
+function renderPartnersView(){
+  var body=document.getElementById('partners-view-body');
+  if(!body)return;
+  var h='<div style="padding:20px 28px">';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">';
+  h+='<h2 style="font-size:24px;font-weight:600;color:#2F2C2C;margin:0">協力会社一覧</h2>';
+  h+='<button onclick="openPartnerModal(null)" style="padding:10px 18px;background:linear-gradient(135deg,#079C95 0%,#46C6C0 100%);color:#fff;border:none;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:6px"><span style="font-size:14px">＋</span>協力会社を登録</button>';
+  h+='</div>';
+  // 検索フィルタ
+  h+='<div style="background:#fff;border-radius:14px;padding:18px 22px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);display:flex;gap:12px;flex-wrap:wrap;align-items:center">';
+  h+='<input type="text" placeholder="会社名・電話番号で検索" style="flex:1;min-width:200px;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-family:inherit;font-size:13px;outline:none">';
+  h+='<select style="padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-family:inherit;font-size:13px;background:#fff;cursor:pointer"><option>全カテゴリ</option><option>運送会社</option><option>個人ドライバー</option><option>倉庫業者</option><option>その他</option></select>';
+  h+='</div>';
+  // 一覧テーブル
+  h+='<div style="background:#fff;border-radius:14px;padding:0;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden">';
+  h+='<table style="width:100%;border-collapse:collapse;font-size:13px">';
+  h+='<thead><tr style="background:#fafbfc"><th style="padding:12px 14px;text-align:left;font-size:11px;font-weight:600;color:#6b7280;border-bottom:1px solid #eef0f2">会社名</th><th style="padding:12px 14px;text-align:left;font-size:11px;font-weight:600;color:#6b7280;border-bottom:1px solid #eef0f2">カテゴリ</th><th style="padding:12px 14px;text-align:left;font-size:11px;font-weight:600;color:#6b7280;border-bottom:1px solid #eef0f2">電話番号</th><th style="padding:12px 14px;text-align:left;font-size:11px;font-weight:600;color:#6b7280;border-bottom:1px solid #eef0f2">担当者</th><th style="padding:12px 14px;text-align:left;font-size:11px;font-weight:600;color:#6b7280;border-bottom:1px solid #eef0f2">エリア</th><th style="padding:12px 14px;text-align:right;font-size:11px;font-weight:600;color:#6b7280;border-bottom:1px solid #eef0f2">操作</th></tr></thead><tbody>';
+  // ダミーデータ
+  var dummy=[
+    {name:'佐藤運輸株式会社',cat:'運送会社',tel:'06-1234-5678',person:'佐藤 一郎',area:'関西全域'},
+    {name:'山田運輸',cat:'運送会社',tel:'052-987-6543',person:'山田 太郎',area:'中部'},
+    {name:'田中ドライバー',cat:'個人ドライバー',tel:'090-1234-5678',person:'田中 一郎',area:'関西'},
+    {name:'関西倉庫サービス',cat:'倉庫業者',tel:'06-5555-1234',person:'鈴木 部長',area:'大阪市内'}
+  ];
+  dummy.forEach(function(p){
+    h+='<tr style="border-bottom:1px solid #f1f3f5"><td style="padding:13px 14px;font-weight:500;color:#2F2C2C">'+p.name+'</td><td style="padding:13px 14px"><span style="background:#eafaf5;color:#079C95;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600">'+p.cat+'</span></td><td style="padding:13px 14px;color:#374151">'+p.tel+'</td><td style="padding:13px 14px;color:#374151">'+p.person+'</td><td style="padding:13px 14px;color:#374151">'+p.area+'</td><td style="padding:13px 14px;text-align:right"><button style="padding:6px 12px;background:#fff;color:#374151;border:1.5px solid #eef0f2;border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600">詳細</button></td></tr>';
+  });
+  h+='</tbody></table>';
+  h+='</div>';
+  h+='</div>';
+  body.innerHTML=h;
+}
+
+function openPartnerModal(id){
+  showToast('協力会社登録機能は準備中です');
 }
 
 // ========== OCR設定 ==========
@@ -7729,11 +7773,11 @@ function hideTopOverlay(){
 }
 function renderTopPage(){
   if(typeof _topBranch==='undefined')window._topBranch='osaka';
-  var h='<div class="top-page" style="display:flex;flex-direction:column;width:100%;max-width:520px;margin:0 auto;position:relative;padding:8px 4px">';
-  h+='<button onclick="hideTopOverlay()" style="position:absolute;top:-4px;right:0;background:none;border:none;font-size:26px;cursor:pointer;color:#9ca3af;font-weight:600;width:36px;height:36px;display:flex;align-items:center;justify-content:center">×</button>';
+  var h='<div class="top-page">';
+  h+='<button onclick="hideTopOverlay()" style="position:absolute;top:-8px;right:-4px;background:none;border:none;font-size:24px;cursor:pointer;color:#9ca3af;font-weight:600;width:36px;height:36px;display:flex;align-items:center;justify-content:center;line-height:1">×</button>';
 
   // 経理 / 管理（2列カード）
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px;margin-bottom:28px">';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;margin-bottom:24px">';
   h+='<div onclick="gotoKeiri()" style="background:#fff;border:1.5px solid #eef0f2;border-radius:14px;padding:22px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .15s" onmouseover="this.style.borderColor=\'#079C95\';this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 4px 12px rgba(7,156,149,.12)\'" onmouseout="this.style.borderColor=\'#eef0f2\';this.style.transform=\'none\';this.style.boxShadow=\'none\'">';
   h+='<div style="display:flex;align-items:center;gap:12px"><div style="width:42px;height:42px;background:#eafaf5;border-radius:10px;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#079C95" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="17" x2="10" y2="17"/><line x1="14" y1="17" x2="16" y2="17"/></svg></div><div style="font-size:15px;font-weight:600;color:#2F2C2C">経理</div></div>';
   h+='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
@@ -7745,7 +7789,7 @@ function renderTopPage(){
   h+='</div>';
 
   // 配車セクション
-  h+='<div style="font-size:18px;font-weight:600;color:#2F2C2C;margin-bottom:12px;padding-left:4px">配車</div>';
+  h+='<div style="font-size:18px;font-weight:600;color:#2F2C2C;margin-bottom:14px">配車</div>';
 
   // 拠点タブ（大阪/滋賀/名古屋）
   h+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">';
