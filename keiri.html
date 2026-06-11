@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<title>DAIEI EXPRESS - 経理</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:"Noto Sans JP",sans-serif;font-size:15px;background:#f9fafb;color:#1a1a1a;margin:0;padding:0}
+#app{height:100%;display:flex;padding:14px 0 14px 14px;box-sizing:border-box}
+
+/* SIDEBAR */
+.sidebar{width:240px;background:linear-gradient(180deg,#079C95 0%,#46C6C0 100%);color:#fff;border-radius:18px;padding:20px 14px;display:flex;flex-direction:column;flex-shrink:0;height:calc(100vh - 28px)}
+.sb-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding:6px 10px;cursor:pointer}
+.sb-logo-mark{width:38px;height:38px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-logo-mark img{width:30px;height:30px}
+.sb-logo-text{display:flex;flex-direction:column;line-height:1.2}
+.sb-logo-main{font-size:14px;font-weight:700}
+.sb-logo-sub{font-size:10px;opacity:.85;letter-spacing:1.5px}
+.sb-nav{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+.sb-item{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;color:#fff;cursor:pointer;font-size:14px;font-weight:500;transition:background .15s;text-decoration:none}
+.sb-item:hover{background:rgba(255,255,255,.1)}
+.sb-item.active{background:#fff;color:#079C95;font-weight:600}
+.sb-bottom{padding-top:14px;border-top:1px solid rgba(255,255,255,.2);margin-top:8px}
+.sb-user{display:flex;align-items:center;gap:10px;padding:8px 10px}
+.sb-user-avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px}
+.sb-user-name{font-weight:600;font-size:14px}
+.sb-user-role{font-size:11px;opacity:.85;margin-top:2px}
+
+/* MAIN */
+.main-wrap{flex:1;display:flex;flex-direction:column;padding:0 14px;min-width:0}
+.content-area{flex:1;overflow-y:auto;padding:20px 28px}
+.content-area h2{font-size:24px;font-weight:600;color:#2F2C2C;margin:0 0 20px}
+
+/* CARDS */
+.k-card{background:#fff;border-radius:16px;padding:24px 26px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px}
+.k-card-title{font-size:17px;font-weight:600;color:#2F2C2C;margin-bottom:18px}
+
+/* BUTTONS */
+.btn-primary{padding:10px 20px;background:linear-gradient(135deg,#079C95 0%,#46C6C0 100%);color:#fff;border:none;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:600;font-size:13px}
+.btn-secondary{padding:10px 20px;background:#fff;color:#374151;border:1.5px solid #eef0f2;border-radius:10px;cursor:pointer;font-family:inherit;font-weight:600;font-size:13px}
+
+/* INPUTS */
+.k-input{width:100%;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-family:inherit;font-size:13px;outline:none}
+.k-input:focus{border-color:#079C95}
+
+/* TABLES */
+.k-table{width:100%;border-collapse:collapse;font-size:13px}
+.k-table th{text-align:left;font-size:11px;font-weight:600;color:#6b7280;padding:10px 12px;background:#fafbfc;border-bottom:1px solid #eef0f2}
+.k-table td{padding:12px;border-bottom:1px solid #f1f3f5}
+
+/* RESPONSIVE */
+#hamburger-btn{display:none;position:fixed;top:14px;left:14px;z-index:9001;background:linear-gradient(135deg,#079C95 0%,#46C6C0 100%);color:#fff;border:none;width:44px;height:44px;border-radius:12px;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(7,156,149,.28)}
+#sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.4);backdrop-filter:blur(2px);z-index:8999}
+@media(max-width:1024px){
+  #hamburger-btn{display:inline-flex}
+  #app{padding:0;height:100vh}
+  .sidebar{position:fixed;left:0;top:0;bottom:0;width:280px;max-width:85vw;height:100%;border-radius:0;z-index:9000;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 32px rgba(0,0,0,.2);padding-top:64px}
+  body.sidebar-open .sidebar{transform:translateX(0)}
+  body.sidebar-open #sidebar-overlay{display:block}
+  .main-wrap{padding:0;width:100%}
+  .content-area{padding:72px 16px 16px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- HAMBURGER -->
+  <button id="hamburger-btn" onclick="toggleSidebar()" aria-label="メニュー">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div id="sidebar-overlay" onclick="toggleSidebar(false)"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-logo" onclick="location.href='mgmt.html'">
+      <div class="sb-logo-mark"><img src="" id="sb-logo-img" alt="DEX"></div>
+      <div class="sb-logo-text">
+        <span class="sb-logo-main">DAIEI EXPRESS</span>
+        <span class="sb-logo-sub">KEIRI</span>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <a class="sb-item active" onclick="switchKView('invoice')" id="nav-invoice">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        請求書発行
+      </a>
+      <a class="sb-item" onclick="switchKView('amount')" id="nav-amount">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        金額入力
+      </a>
+      <a class="sb-item" onclick="switchKView('payment')" id="nav-payment">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        支払金額入力
+      </a>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-user">
+        <div class="sb-user-avatar" id="sb-user-avatar">—</div>
+        <div>
+          <div class="sb-user-name" id="sb-user-name">—</div>
+          <div class="sb-user-role" id="sb-user-role">—</div>
+        </div>
+      </div>
+      <a class="sb-item" onclick="location.href='mgmt.html'" style="margin-top:6px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        管理画面へ
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+    <div class="content-area">
+      <!-- 請求書発行 -->
+      <div id="view-invoice">
+        <h2>請求書発行</h2>
+        <div class="k-card">
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
+            <label style="font-size:13px;font-weight:600;color:#374151">対象月：</label>
+            <input type="month" id="inv-month" class="k-input" style="width:auto" value="">
+            <select id="inv-branch" class="k-input" style="width:auto">
+              <option value="">全拠点</option>
+              <option value="osaka">大阪本社</option>
+              <option value="shiga">滋賀支店</option>
+              <option value="nagoya">名古屋支店</option>
+            </select>
+            <button class="btn-primary" onclick="loadInvoiceList()">表示</button>
+          </div>
+          <div id="inv-list">
+            <table class="k-table">
+              <thead><tr><th>請求番号</th><th>請求先</th><th>請求金額</th><th>発行日</th><th>状態</th><th>操作</th></tr></thead>
+              <tbody>
+                <tr><td>INV-2026-0601-001</td><td>大阪商事株式会社</td><td>¥3,820,000</td><td>2026/06/01</td><td><span style="background:#eafaf5;color:#079C95;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600">発行済</span></td><td><button class="btn-secondary" style="padding:6px 12px;font-size:12px">PDF</button></td></tr>
+                <tr><td>INV-2026-0601-002</td><td>山田運送</td><td>¥1,650,000</td><td>2026/06/01</td><td><span style="background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600">未発行</span></td><td><button class="btn-primary" style="padding:6px 12px;font-size:12px">発行</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 金額入力 -->
+      <div id="view-amount" style="display:none">
+        <h2>金額入力</h2>
+        <div class="k-card">
+          <div class="k-card-title">案件ごとの金額入力</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
+            <input type="date" class="k-input" style="width:auto">
+            <input type="text" placeholder="案件番号で検索" class="k-input" style="flex:1;min-width:200px">
+            <button class="btn-primary">検索</button>
+          </div>
+          <table class="k-table">
+            <thead><tr><th>案件番号</th><th>日付</th><th>お客様</th><th>運賃</th><th>消費税</th><th>合計</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr><td>B-2026-0601-001</td><td>2026/06/01</td><td>大阪商事</td><td><input type="text" class="k-input" style="width:120px" value="80,000"></td><td><input type="text" class="k-input" style="width:80px" value="8,000"></td><td>¥88,000</td><td><button class="btn-primary" style="padding:6px 12px;font-size:12px">保存</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 支払金額入力 -->
+      <div id="view-payment" style="display:none">
+        <h2>支払金額入力</h2>
+        <div class="k-card">
+          <div class="k-card-title">運送会社・ドライバーへの支払金額</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
+            <input type="month" class="k-input" style="width:auto">
+            <input type="text" placeholder="運送会社名で検索" class="k-input" style="flex:1;min-width:200px">
+            <button class="btn-primary">検索</button>
+          </div>
+          <table class="k-table">
+            <thead><tr><th>運送会社</th><th>件数</th><th>支払金額</th><th>消費税</th><th>合計</th><th>状態</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr><td>佐藤運輸</td><td>28件</td><td><input type="text" class="k-input" style="width:140px" value="1,250,000"></td><td><input type="text" class="k-input" style="width:100px" value="125,000"></td><td>¥1,375,000</td><td><span style="background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600">未払</span></td><td><button class="btn-primary" style="padding:6px 12px;font-size:12px">確定</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchKView(v){
+  ['invoice','amount','payment'].forEach(function(k){
+    var el=document.getElementById('view-'+k);
+    if(el)el.style.display=v===k?'block':'none';
+    var nav=document.getElementById('nav-'+k);
+    if(nav)nav.classList.toggle('active',v===k);
+  });
+  if(window.innerWidth<=1024)document.body.classList.remove('sidebar-open');
+}
+function toggleSidebar(open){
+  if(open===false)document.body.classList.remove('sidebar-open');
+  else if(open===true)document.body.classList.add('sidebar-open');
+  else document.body.classList.toggle('sidebar-open');
+}
+function loadInvoiceList(){
+  // TODO: Firebase連携
+  console.log('Load invoices');
+}
+// 初期値：今月
+var d=new Date();
+document.getElementById('inv-month').value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+</script>
+</body>
+</html>
